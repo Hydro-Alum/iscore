@@ -1,0 +1,48 @@
+.card--wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem 1rem;
+
+}
+
+.card--container {
+    border: 1px solid black;
+    width: 30%;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(12, 12, 80);
+    background-color: lightgray;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+}
+
+.card--container a {
+    text-decoration: none;
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card--container:hover {
+    background-color: #666;
+    color: whitesmoke;
+    transform: translate(0.5rem,-0.5rem);
+}
+
+.card--container a:hover {
+    color: whitesmoke;
+}
+
+.card--container i {
+    font-size: 2rem;
+    justify-content: center;
+}

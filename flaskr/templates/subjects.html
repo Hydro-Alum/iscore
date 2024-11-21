@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}All Subjects{% endblock %}
+
+{% block content %}
+<div class="table-wrapper">
+    <div class="modal hidden" id="modal">
+        <div class="modal-popup" id="modal-popup">
+            <h3>Would you like to Delete score permanently?</h3>
+            <h4>To continue type <b style="color: red;">DELETE</b> in all uppercase</h4>
+            <input type="text" name="modal-delete-input" id="modal-delete-input">
+            <button type="submit" class="modal-submit-btn" id="modal-submit-btn" name="modal-submit-btn">Delete</button>
+            <button type="button" class="modal-btn-close" id="modal-close-btn" >&times;</button>
+        </div>
+    </div>
+    <table>
+        <caption><h1>ALL REGISTERED SUBJECTS</h1></caption>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Subject</th>
+                <th>Edit Score</th>
+                <th style="color: red;">Delete Subject</th>
+            </tr>   
+        </thead>
+        <tbody id="students-tbody">
+            {% for subject in subjects%}
+                <tr>
+                    <td>{{ subjects.index(subject) + 1 }}</td>
+                    <td>{{ subject.name | upper }}</td>
+                    <td><a href="{{url_for('managements.subject_edit_view', subject_id=subject.id)}}">UPDATE</a></td>
+                    <td><button class="delete-score" data-item-id="{{subject.id}}">&cross;</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="{{ url_for('static', filename='JS/subject-delete.js') }}"></script>
+</div>
+{% endblock %}

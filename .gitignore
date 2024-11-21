@@ -1,0 +1,5 @@
+env/
+/flaskr/__pycache__/
+flaskr/.env
+.vscode/
+migrations/
