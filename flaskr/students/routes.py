@@ -994,9 +994,11 @@ def result_download(student_id):
                     row_cells[3].text = str(result.practical_score or "-")  # Practical
                     row_cells[4].text = str(result.exam_score or "-")  # Exam
                     row_cells[5].text = str(result.total_score or "-")  # Total
-                    row_cells[6].text = grade_calculator(result.total_score)  # Grade
+                    row_cells[6].text = grade_calculator(
+                        int(result.total_score)
+                    )  # Grade
                     row_cells[7].text = interpretation_func(
-                        result.total_score
+                        int(result.total_score)
                     )  # Interpretation
                 else:
                     row_cells[3].text = str(result.exam_score or "-")  # Exam
