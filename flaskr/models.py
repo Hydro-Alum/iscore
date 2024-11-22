@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, session
 from datetime import datetime
 from sqlalchemy import desc
 from flaskr import db, login_manager
@@ -21,13 +21,32 @@ from flask_login import UserMixin
 #         abort(404)
 
 
-@login_manager.user_loader
-def load_user(user_id):
+# @login_manager.user_loader
+# def load_user(user_id):
+#     # Try to load user from each table
+#     for user_model in [Management, Teacher, Student]:
+#         user = user_model.query.get(int(user_id))
+#         if user:
+#             print("user from model is:", user.role)
+#             return user
+#     return None
+
+
+@login_manager.request_loader
+def load_user_from_request(request):
+    # Extract email from request (e.g., session, cookies, headers, etc.)
+    email = session.get("email") or request.args.get(
+        "email"
+    )  # Example: Use query params or another method
+
+    if not email:
+        return None
+
     # Try to load user from each table
     for user_model in [Management, Teacher, Student]:
-        user = user_model.query.get(int(user_id))
+        user = user_model.query.filter_by(email=email).first()
         if user:
-            print("user from model is:", user.role)
+            print("User loaded from model:", user.role)
             return user
     return None
 

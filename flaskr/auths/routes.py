@@ -37,6 +37,7 @@ def login():
             management.password, form.password.data
         ):
             login_user(management, remember=form.remember.data)
+            session["email"] = management.email
             flash(
                 f"Welcome back Admin!",
                 "info",
@@ -51,6 +52,7 @@ def login():
             teacher.password, form.password.data
         ):
             login_user(teacher, remember=form.remember.data)
+            session["email"] = teacher.email
             flash(
                 f"Welcome back {teacher.title.title()} {teacher.last_name.title()}!",
                 "success",
@@ -60,6 +62,7 @@ def login():
             student.password, form.password.data
         ):
             login_user(student, remember=form.remember.data)
+            session["email"] = student.email
             flash(
                 f"Welcome back {student.last_name.title()} {student.first_name.title()}!",
                 "success",
