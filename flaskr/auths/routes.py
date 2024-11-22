@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request, Blueprint, flash
+from flask import redirect, render_template, url_for, request, Blueprint, flash, session
 from flask_login import login_user, current_user, logout_user
 from flaskr import bcrypt
 from flaskr.auths.forms import LoginForm
@@ -73,4 +73,5 @@ def login():
 @auths.route("/logout")
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for("main.home_page"))
