@@ -27,6 +27,7 @@ def load_user(user_id):
     for user_model in [Management, Teacher, Student]:
         user = user_model.query.get(int(user_id))
         if user:
+            print("user from model is:", user.role)
             return user
     return None
 
