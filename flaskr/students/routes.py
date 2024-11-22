@@ -128,6 +128,65 @@ def student_dashboard():
 
 
 # TODO: generate picture edit and save path
+# @students.route("/register-student", methods=["GET", "POST"])
+# @login_required
+# @requires_role("admin")
+# def student_register():
+#     form = StudentRegisterationForm()
+#     if form.validate_on_submit():
+#         if form.picture.data:
+#             picture = save_picture(form.picture.data)
+#             hashed_password = bcrypt.generate_password_hash(
+#                 form.last_name.data.lower()
+#             ).decode("utf-8")
+#             sID = student_identification(form.student_class.data)
+#             student = Student(
+#                 first_name=form.first_name.data,
+#                 middle_name=form.middle_name.data,
+#                 last_name=form.last_name.data,
+#                 dob=form.dob.data,
+#                 sex=form.sex.data,
+#                 email=form.email.data,
+#                 student_class=form.student_class.data,
+#                 department=form.department.data,
+#                 parent_number=form.parent_number.data,
+#                 address=form.address.data,
+#                 picture=picture,
+#                 password=hashed_password,
+#                 sID=sID,
+#             )
+#         else:
+#             hashed_password = bcrypt.generate_password_hash(
+#                 form.last_name.data.lower()
+#             ).decode("utf-8")
+#             sID = student_identification(form.student_class.data)
+#             student = Student(
+#                 first_name=form.first_name.data,
+#                 middle_name=form.middle_name.data,
+#                 last_name=form.last_name.data,
+#                 dob=form.dob.data,
+#                 sex=form.sex.data,
+#                 email=form.email.data,
+#                 student_class=form.student_class.data,
+#                 department=form.department.data,
+#                 parent_number=form.parent_number.data,
+#                 address=form.address.data,
+#                 password=hashed_password,
+#                 sID=sID,
+#             )
+#         db.session.add(student)
+#         db.session.commit()
+#         flash(
+#             f"{form.first_name.data} {form.last_name.data} has been successfully registered as a student!",
+#             "success",
+#         )
+#         return redirect(url_for("students.student_register"))
+#     return render_template("register-student.html", form=form)
+
+
+import shutil  # For moving files temporarily to static during development
+
+
 @students.route("/register-student", methods=["GET", "POST"])
 @login_required
 @requires_role("admin")
@@ -135,45 +194,47 @@ def student_register():
     form = StudentRegisterationForm()
     if form.validate_on_submit():
         if form.picture.data:
-            picture = save_picture(form.picture.data)
-            hashed_password = bcrypt.generate_password_hash(
-                form.last_name.data.lower()
-            ).decode("utf-8")
-            sID = student_identification(form.student_class.data)
-            student = Student(
-                first_name=form.first_name.data,
-                middle_name=form.middle_name.data,
-                last_name=form.last_name.data,
-                dob=form.dob.data,
-                sex=form.sex.data,
-                email=form.email.data,
-                student_class=form.student_class.data,
-                department=form.department.data,
-                parent_number=form.parent_number.data,
-                address=form.address.data,
-                picture=picture,
-                password=hashed_password,
-                sID=sID,
+            # Save the picture temporarily in /tmp
+            picture_fn, temp_picture_path = save_picture(form.picture.data)
+
+            # For production: Upload to persistent storage (e.g., S3, Firebase)
+            # For now, we will move it to static/profile_pics for local dev
+            static_profile_pics_path = os.path.join(
+                current_app.root_path, "static", "profile_pics"
             )
+            if not os.path.exists(static_profile_pics_path):
+                os.makedirs(static_profile_pics_path, exist_ok=True)
+
+            final_picture_path = os.path.join(static_profile_pics_path, picture_fn)
+            shutil.move(
+                temp_picture_path, final_picture_path
+            )  # Move from /tmp to static during dev
+
+            # Save filename to the database
+            picture = picture_fn
         else:
-            hashed_password = bcrypt.generate_password_hash(
-                form.last_name.data.lower()
-            ).decode("utf-8")
-            sID = student_identification(form.student_class.data)
-            student = Student(
-                first_name=form.first_name.data,
-                middle_name=form.middle_name.data,
-                last_name=form.last_name.data,
-                dob=form.dob.data,
-                sex=form.sex.data,
-                email=form.email.data,
-                student_class=form.student_class.data,
-                department=form.department.data,
-                parent_number=form.parent_number.data,
-                address=form.address.data,
-                password=hashed_password,
-                sID=sID,
-            )
+            picture = "default.jpg"  # No picture uploaded
+
+        # Process student registration
+        hashed_password = bcrypt.generate_password_hash(
+            form.last_name.data.lower()
+        ).decode("utf-8")
+        sID = student_identification(form.student_class.data)
+        student = Student(
+            first_name=form.first_name.data,
+            middle_name=form.middle_name.data,
+            last_name=form.last_name.data,
+            dob=form.dob.data,
+            sex=form.sex.data,
+            email=form.email.data,
+            student_class=form.student_class.data,
+            department=form.department.data,
+            parent_number=form.parent_number.data,
+            address=form.address.data,
+            picture=picture,
+            password=hashed_password,
+            sID=sID,
+        )
         db.session.add(student)
         db.session.commit()
         flash(
@@ -181,6 +242,7 @@ def student_register():
             "success",
         )
         return redirect(url_for("students.student_register"))
+
     return render_template("register-student.html", form=form)
 
 
