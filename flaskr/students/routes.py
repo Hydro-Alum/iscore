@@ -14,6 +14,7 @@ from flask import (
     jsonify,
     current_app,
     send_from_directory,
+    abort,
 )
 from flask_login import login_required, current_user
 from flaskr import db, bcrypt
@@ -683,37 +684,246 @@ def search_student():
     return jsonify(body)
 
 
+# @students.route("/download-result/<int:student_id>", methods=["POST"])
+# @login_required
+# @requires_role("admin")
+# def result_download(student_id):
+#     term = request.form.get("term")
+#     session = request.form.get("session")
+#     student = Student.query.get(student_id)
+#     results = Result.query.filter_by(
+#         student_id=student_id, term=term, session=session
+#     ).all()
+
+#     cummulative_score = cummulative_score_calc(results)
+#     expected_total = len(results) * 100
+#     percentage = round((cummulative_score / expected_total) * 100, 2)
+#     number_of_distinction = distinction_calc(results)
+#     teacher_comment = teacher_comment_func(percentage)
+
+#     static_dir = os.path.join(current_app.root_path, "static")
+#     template_path = os.path.join(static_dir, "documents/iscore_general_template.docx")
+#     template_path_science = os.path.join(
+#         static_dir, "documents/iscore_general_template_science.docx"
+#     )
+#     output_path = os.path.join(static_dir, "documents/student_report_card.docx")
+
+#     if student and results:
+#         if student.department.lower() == "science":
+#             template = Document(template_path_science)
+#         else:
+#             template = Document(template_path)
+#         template.save(output_path)
+#         new_doc = Document(output_path)
+#         for paragraph in new_doc.paragraphs:
+#             if "{{student_name}}" in paragraph.text:
+#                 paragraph.text = paragraph.text.replace(
+#                     "{{student_name}}",
+#                     f"{student.last_name} {student.first_name} {student.middle_name}",
+#                 )
+#             elif "{{student_id}}" in paragraph.text:
+#                 paragraph.text = paragraph.text.replace(
+#                     "{{student_id}}", str(student.sID)
+#                 )
+#             elif "{{session}}" in paragraph.text:
+#                 paragraph.text = paragraph.text.replace("{{session}}", str(session))
+#             elif "{{term}}" in paragraph.text:
+#                 paragraph.text = paragraph.text.replace("{{term}}", str(term))
+
+#         picture_path = os.path.join(static_dir, f"profile_pics/{student.picture}")
+#         table1 = new_doc.tables[0]
+#         for row in table1.rows:
+#             for cell in row.cells:
+#                 if "{{image}}" in cell.text:
+#                     cell.text = ""
+#                     paragraph = cell.paragraphs[0]
+#                     run = paragraph.add_run()
+#                     run.add_picture(picture_path, width=Inches(0.8))
+#         for table in new_doc.tables:
+#             for row in table.rows:
+#                 for cell in row.cells:
+#                     if "{{student_name}}" in cell.text:
+#                         cell.text = cell.text.replace(
+#                             "{{student_name}}",
+#                             f"{student.last_name} {student.first_name} {student.middle_name}",
+#                         )
+#                     elif "{{student_class}}" in cell.text:
+#                         cell.text = cell.text.replace(
+#                             "{{student_class}}",
+#                             str(student.student_class.upper()),
+#                         )
+#                     elif "{{student_id}}" in cell.text:
+#                         cell.text = cell.text.replace(
+#                             "{{student_id}}",
+#                             str(student.sID),
+#                         )
+#                     elif "{{session}}" in cell.text:
+#                         cell.text = cell.text.replace(
+#                             "{{session}}",
+#                             str(session),
+#                         )
+#                     elif "{{term}}" in cell.text:
+#                         cell.text = cell.text.replace(
+#                             "{{term}}",
+#                             str(term),
+#                         )
+
+#         # Find the table (assuming the first table is where results go)
+#         table = new_doc.tables[2]
+
+#         # Append results
+#         if student.department.lower() == "science":
+#             for result_idx, result in enumerate(results, start=1):
+#                 row_cells = table.add_row().cells
+#                 row_cells[0].text = str(result_idx)  # S/N
+#                 row_cells[1].text = str(result.subject.upper())  # Subject
+#                 row_cells[2].text = str(
+#                     result.test_score if result.test_score else "-"
+#                 )  # Test
+#                 row_cells[3].text = str(
+#                     result.practical_score if result.practical_score else "-"
+#                 )  # Practical
+#                 row_cells[4].text = str(
+#                     result.exam_score if result.exam_score else "-"
+#                 )  # Exam
+#                 row_cells[5].text = str(
+#                     result.total_score if result.total_score else "-"
+#                 )  # Total
+#                 row_cells[6].text = grade_calculator(int(result.total_score))  # grade
+#                 row_cells[7].text = interpretation_func(
+#                     int(result.total_score)
+#                 )  # Interpretation
+#         else:
+#             for result_idx, result in enumerate(results, start=1):
+#                 row_cells = table.add_row().cells
+#                 row_cells[0].text = str(result_idx)  # S/N
+#                 row_cells[1].text = str(result.subject.upper())  # Subject
+#                 row_cells[2].text = str(
+#                     result.test_score if result.test_score else "-"
+#                 )  # Test
+#                 row_cells[3].text = str(
+#                     result.exam_score if result.exam_score else "-"
+#                 )  # Exam
+#                 row_cells[4].text = str(
+#                     result.total_score if result.total_score else "-"
+#                 )  # Total
+#                 row_cells[5].text = grade_calculator(int(result.total_score))  # grade
+#                 row_cells[6].text = interpretation_func(
+#                     int(result.total_score)
+#                 )  # Interpretation
+
+#         picture_path_logo = os.path.join(static_dir, "images/iscore_stamp.png")
+#         table2 = new_doc.tables[3]
+#         for row in table2.rows:
+#             for cell in row.cells:
+#                 if "{{number_of_subject}}" in cell.text:
+#                     cell.text = cell.text.replace(
+#                         "{{number_of_subject}}",
+#                         str(len(results)),
+#                     )
+#                 elif "{{cumulative_score}}" in cell.text:
+#                     cell.text = cell.text.replace(
+#                         "{{cumulative_score}}", str(cummulative_score)
+#                     )
+#                 elif "{{expected_total}}" in cell.text:
+#                     cell.text = cell.text.replace(
+#                         "{{expected_total}}", str(expected_total)
+#                     )
+#                 elif "{{percentage}}" in cell.text:
+#                     cell.text = cell.text.replace("{{percentage}}", str(percentage))
+#                 elif "{{number_of_distinction}}" in cell.text:
+#                     cell.text = cell.text.replace(
+#                         "{{number_of_distinction}}", str(number_of_distinction)
+#                     )
+#                 elif "{{date_printed}}" in cell.text:
+#                     parts = cell.text.split("{{date_printed}}")
+#                     cell.text = parts[0]
+#                     paragraph = cell.paragraphs[0]
+#                     new_run = paragraph.add_run(datetime.utcnow().strftime("%d/%m/%Y"))
+#                     new_run.font.size = Pt(6)  # Set the font size to 8 points
+
+#         table3 = new_doc.tables[4]
+#         for row in table3.rows:
+#             for cell in row.cells:
+#                 if "{{teachers_comment}}" in cell.text:
+#                     cell.text = cell.text.replace(
+#                         "{{teachers_comment}}",
+#                         teacher_comment,
+#                     )
+
+#         new_doc.save(output_path)
+#         print(
+#             f"Report card for student ID {student.sID} generated and saved to {output_path}"
+#         )
+#         flash(f"Report card for student ID {student.sID} generated!", "success")
+#     else:
+#         print(f"Student with ID {student.sID} not found.")
+#         flash(f"Student with ID {student.sID} not found.", "info")
+#     file_name = "documents/student_report_card.docx"
+#     return send_from_directory(static_dir, file_name, as_attachment=True)
+# return redirect(url_for("students.student_profile", std_id=str(student_id)))
+
+
 @students.route("/download-result/<int:student_id>", methods=["POST"])
 @login_required
 @requires_role("admin")
 def result_download(student_id):
-    term = request.form.get("term")
-    session = request.form.get("session")
-    student = Student.query.get(student_id)
-    results = Result.query.filter_by(
-        student_id=student_id, term=term, session=session
-    ).all()
+    print("Starting result_download function...")
+    try:
+        # Fetch request data
+        term = request.form.get("term")
+        session = request.form.get("session")
+        print(f"Received term: {term}, session: {session}, student_id: {student_id}")
 
-    cummulative_score = cummulative_score_calc(results)
-    expected_total = len(results) * 100
-    percentage = round((cummulative_score / expected_total) * 100, 2)
-    number_of_distinction = distinction_calc(results)
-    teacher_comment = teacher_comment_func(percentage)
+        # Fetch student and results
+        student = Student.query.get(student_id)
+        results = Result.query.filter_by(
+            student_id=student_id, term=term, session=session
+        ).all()
+        print(f"Fetched student: {student}, Results count: {len(results)}")
 
-    static_dir = os.path.join(current_app.root_path, "static")
-    template_path = os.path.join(static_dir, "documents/iscore_general_template.docx")
-    template_path_science = os.path.join(
-        static_dir, "documents/iscore_general_template_science.docx"
-    )
-    output_path = os.path.join(static_dir, "documents/student_report_card.docx")
+        if not student or not results:
+            print("Student or results not found.")
+            flash(f"Student with ID {student_id} or results not found.", "info")
+            abort(404, description="Student or results not found.")
 
-    if student and results:
+        # Calculations
+        cummulative_score = cummulative_score_calc(results)
+        expected_total = len(results) * 100
+        percentage = round((cummulative_score / expected_total) * 100, 2)
+        number_of_distinction = distinction_calc(results)
+        teacher_comment = teacher_comment_func(percentage)
+        print(
+            f"Calculations completed: Percentage={percentage}, Distinctions={number_of_distinction}"
+        )
+
+        # Paths
+        static_dir = os.path.join(current_app.root_path, "static")
+        template_path = os.path.join(
+            static_dir, "documents/iscore_general_template.docx"
+        )
+        template_path_science = os.path.join(
+            static_dir, "documents/iscore_general_template_science.docx"
+        )
+        output_path = os.path.join(static_dir, "documents/student_report_card.docx")
+        print(f"Static directory: {static_dir}")
+        print(f"Template paths: {template_path}, {template_path_science}")
+
+        # Template selection
         if student.department.lower() == "science":
+            print("Loading science template...")
             template = Document(template_path_science)
         else:
+            print("Loading general template...")
             template = Document(template_path)
+
+        # Save template to output path
         template.save(output_path)
+        print(f"Template saved to {output_path}")
         new_doc = Document(output_path)
+
+        # Replace placeholders in document
+        print("Replacing placeholders in document...")
         for paragraph in new_doc.paragraphs:
             if "{{student_name}}" in paragraph.text:
                 paragraph.text = paragraph.text.replace(
@@ -729,7 +939,9 @@ def result_download(student_id):
             elif "{{term}}" in paragraph.text:
                 paragraph.text = paragraph.text.replace("{{term}}", str(term))
 
+        # Handle profile picture
         picture_path = os.path.join(static_dir, f"profile_pics/{student.picture}")
+        print(f"Profile picture path: {picture_path}")
         table1 = new_doc.tables[0]
         for row in table1.rows:
             for cell in row.cells:
@@ -737,7 +949,11 @@ def result_download(student_id):
                     cell.text = ""
                     paragraph = cell.paragraphs[0]
                     run = paragraph.add_run()
+                    print("Adding profile picture...")
                     run.add_picture(picture_path, width=Inches(0.8))
+
+        # Replace placeholders in tables
+        print("Replacing placeholders in tables...")
         for table in new_doc.tables:
             for row in table.rows:
                 for cell in row.cells:
@@ -767,12 +983,11 @@ def result_download(student_id):
                             str(term),
                         )
 
-        # Find the table (assuming the first table is where results go)
+        # Populate result table
+        print("Populating result table...")
         table = new_doc.tables[2]
-
-        # Append results
-        if student.department.lower() == "science":
-            for result_idx, result in enumerate(results, start=1):
+        for result_idx, result in enumerate(results, start=1):
+            try:
                 row_cells = table.add_row().cells
                 row_cells[0].text = str(result_idx)  # S/N
                 row_cells[1].text = str(result.subject.upper())  # Subject
@@ -792,75 +1007,19 @@ def result_download(student_id):
                 row_cells[7].text = interpretation_func(
                     int(result.total_score)
                 )  # Interpretation
-        else:
-            for result_idx, result in enumerate(results, start=1):
-                row_cells = table.add_row().cells
-                row_cells[0].text = str(result_idx)  # S/N
-                row_cells[1].text = str(result.subject.upper())  # Subject
-                row_cells[2].text = str(
-                    result.test_score if result.test_score else "-"
-                )  # Test
-                row_cells[3].text = str(
-                    result.exam_score if result.exam_score else "-"
-                )  # Exam
-                row_cells[4].text = str(
-                    result.total_score if result.total_score else "-"
-                )  # Total
-                row_cells[5].text = grade_calculator(int(result.total_score))  # grade
-                row_cells[6].text = interpretation_func(
-                    int(result.total_score)
-                )  # Interpretation
+            except Exception as e:
+                print(f"Error processing result {result_idx}: {e}")
 
-        picture_path_logo = os.path.join(static_dir, "images/iscore_stamp.png")
-        table2 = new_doc.tables[3]
-        for row in table2.rows:
-            for cell in row.cells:
-                if "{{number_of_subject}}" in cell.text:
-                    cell.text = cell.text.replace(
-                        "{{number_of_subject}}",
-                        str(len(results)),
-                    )
-                elif "{{cumulative_score}}" in cell.text:
-                    cell.text = cell.text.replace(
-                        "{{cumulative_score}}", str(cummulative_score)
-                    )
-                elif "{{expected_total}}" in cell.text:
-                    cell.text = cell.text.replace(
-                        "{{expected_total}}", str(expected_total)
-                    )
-                elif "{{percentage}}" in cell.text:
-                    cell.text = cell.text.replace("{{percentage}}", str(percentage))
-                elif "{{number_of_distinction}}" in cell.text:
-                    cell.text = cell.text.replace(
-                        "{{number_of_distinction}}", str(number_of_distinction)
-                    )
-                elif "{{date_printed}}" in cell.text:
-                    parts = cell.text.split("{{date_printed}}")
-                    cell.text = parts[0]
-                    paragraph = cell.paragraphs[0]
-                    new_run = paragraph.add_run(datetime.utcnow().strftime("%d/%m/%Y"))
-                    new_run.font.size = Pt(6)  # Set the font size to 8 points
-
-        table3 = new_doc.tables[4]
-        for row in table3.rows:
-            for cell in row.cells:
-                if "{{teachers_comment}}" in cell.text:
-                    cell.text = cell.text.replace(
-                        "{{teachers_comment}}",
-                        teacher_comment,
-                    )
-
+        # Finalize document
         new_doc.save(output_path)
-        print(
-            f"Report card for student ID {student.sID} generated and saved to {output_path}"
-        )
-        flash(f"Report card for student ID {student.sID} generated!", "success")
-    else:
-        print(f"Student with ID {student.sID} not found.")
-        flash(f"Student with ID {student.sID} not found.", "info")
-    file_name = "documents/student_report_card.docx"
-    return send_from_directory(static_dir, file_name, as_attachment=True)
-    # return redirect(url_for("students.student_profile", std_id=str(student_id)))
+        print(f"Final document saved to {output_path}")
+
+        # Return file
+        file_name = "documents/student_report_card.docx"
+        return send_from_directory(static_dir, file_name, as_attachment=True)
+    except Exception as e:
+        print(f"Error in result_download: {e}")
+        abort(500, description="An error occurred while processing the request.")
 
 
 # TODO: A lot to be done here
