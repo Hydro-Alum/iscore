@@ -1,4 +1,5 @@
 import os
+import shutil  # For moving files temporarily to static during development
 import tempfile
 
 # import pythoncom
@@ -183,8 +184,6 @@ def student_dashboard():
 #         return redirect(url_for("students.student_register"))
 #     return render_template("register-student.html", form=form)
 
-
-import shutil  # For moving files temporarily to static during development
 
 
 @students.route("/register-student", methods=["GET", "POST"])
