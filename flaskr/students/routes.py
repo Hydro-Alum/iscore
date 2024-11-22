@@ -1008,6 +1008,44 @@ def result_download(student_id):
             except Exception as e:
                 print(f"Error adding result row {result_idx}: {e}")
 
+        table2 = new_doc.tables[3]
+        for row in table2.rows:
+            for cell in row.cells:
+                if "{{number_of_subject}}" in cell.text:
+                    cell.text = cell.text.replace(
+                        "{{number_of_subject}}",
+                        str(len(results)),
+                    )
+                elif "{{cumulative_score}}" in cell.text:
+                    cell.text = cell.text.replace(
+                        "{{cumulative_score}}", str(cummulative_score)
+                    )
+                elif "{{expected_total}}" in cell.text:
+                    cell.text = cell.text.replace(
+                        "{{expected_total}}", str(expected_total)
+                    )
+                elif "{{percentage}}" in cell.text:
+                    cell.text = cell.text.replace("{{percentage}}", str(percentage))
+                elif "{{number_of_distinction}}" in cell.text:
+                    cell.text = cell.text.replace(
+                        "{{number_of_distinction}}", str(number_of_distinction)
+                    )
+                elif "{{date_printed}}" in cell.text:
+                    parts = cell.text.split("{{date_printed}}")
+                    cell.text = parts[0]
+                    paragraph = cell.paragraphs[0]
+                    new_run = paragraph.add_run(datetime.utcnow().strftime("%d/%m/%Y"))
+                    new_run.font.size = Pt(6)  # Set the font size to 8 points
+
+        table3 = new_doc.tables[4]
+        for row in table3.rows:
+            for cell in row.cells:
+                if "{{teachers_comment}}" in cell.text:
+                    cell.text = cell.text.replace(
+                        "{{teachers_comment}}",
+                        teacher_comment,
+                    )
+
         # Finalize document
         new_doc.save(output_path)
         print(f"Final document saved to {output_path}")
