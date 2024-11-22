@@ -872,10 +872,12 @@ def search_student():
 def result_download(student_id):
     print("Starting result_download function...")
     try:
+        # Fetch request data
         term = request.form.get("term")
         session = request.form.get("session")
         print(f"Received term: {term}, session: {session}, student_id: {student_id}")
 
+        # Fetch student and results
         student = Student.query.get(student_id)
         results = Result.query.filter_by(
             student_id=student_id, term=term, session=session
@@ -887,6 +889,7 @@ def result_download(student_id):
             flash(f"Student with ID {student_id} or results not found.", "info")
             abort(404, description="Student or results not found.")
 
+        # Calculations
         cummulative_score = cummulative_score_calc(results)
         expected_total = len(results) * 100
         percentage = round((cummulative_score / expected_total) * 100, 2)
@@ -896,6 +899,7 @@ def result_download(student_id):
             f"Calculations completed: Percentage={percentage}, Distinctions={number_of_distinction}"
         )
 
+        # Template paths
         static_dir = os.path.join(current_app.root_path, "static")
         template_path = os.path.join(
             static_dir, "documents/iscore_general_template.docx"
@@ -904,6 +908,7 @@ def result_download(student_id):
             static_dir, "documents/iscore_general_template_science.docx"
         )
 
+        # Choose template based on department
         if student.department.lower() == "science":
             print("Loading science template...")
             template = Document(template_path_science)
@@ -911,15 +916,17 @@ def result_download(student_id):
             print("Loading general template...")
             template = Document(template_path)
 
+        # Create a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as temp_file:
             output_path = temp_file.name
             print(f"Temporary file created at {output_path}")
 
-        # Save the document to the temporary file
+        # Save a copy of the template to the temporary file
         template.save(output_path)
         new_doc = Document(output_path)
         print("Replacing placeholders in the document...")
 
+        # Replace placeholders in paragraphs
         for paragraph in new_doc.paragraphs:
             if "{{student_name}}" in paragraph.text:
                 paragraph.text = paragraph.text.replace(
@@ -935,6 +942,7 @@ def result_download(student_id):
             elif "{{term}}" in paragraph.text:
                 paragraph.text = paragraph.text.replace("{{term}}", str(term))
 
+        # Handle profile picture replacement
         picture_path = os.path.join(static_dir, f"profile_pics/{student.picture}")
         print(f"Profile picture path: {picture_path}")
 
@@ -945,13 +953,62 @@ def result_download(student_id):
                     cell.text = ""
                     paragraph = cell.paragraphs[0]
                     run = paragraph.add_run()
-                    print("Adding profile picture...")
-                    run.add_picture(picture_path, width=Inches(0.8))
+                    try:
+                        run.add_picture(picture_path, width=Inches(0.8))
+                        print("Profile picture added.")
+                    except Exception as e:
+                        print(f"Error adding profile picture: {e}")
 
-        # Populate tables and placeholders (same logic as before)
-        # ... Add your placeholder replacement and table population logic here ...
+        # Replace placeholders in tables
+        for table in new_doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    if "{{student_name}}" in cell.text:
+                        cell.text = cell.text.replace(
+                            "{{student_name}}",
+                            f"{student.last_name} {student.first_name} {student.middle_name}",
+                        )
+                    elif "{{student_class}}" in cell.text:
+                        cell.text = cell.text.replace(
+                            "{{student_class}}", str(student.student_class.upper())
+                        )
+                    elif "{{student_id}}" in cell.text:
+                        cell.text = cell.text.replace(
+                            "{{student_id}}", str(student.sID)
+                        )
+                    elif "{{session}}" in cell.text:
+                        cell.text = cell.text.replace("{{session}}", str(session))
+                    elif "{{term}}" in cell.text:
+                        cell.text = cell.text.replace("{{term}}", str(term))
 
-        # Save the final document
+        # Populate result table
+        print("Populating result table...")
+        table = new_doc.tables[2]
+        for result_idx, result in enumerate(results, start=1):
+            try:
+                row_cells = table.add_row().cells
+                row_cells[0].text = str(result_idx)  # S/N
+                row_cells[1].text = str(result.subject.upper())  # Subject
+                row_cells[2].text = str(result.test_score or "-")  # Test
+                if student.department.lower() == "science":
+                    row_cells[3].text = str(result.practical_score or "-")  # Practical
+                    row_cells[4].text = str(result.exam_score or "-")  # Exam
+                    row_cells[5].text = str(result.total_score or "-")  # Total
+                    row_cells[6].text = grade_calculator(result.total_score)  # Grade
+                    row_cells[7].text = interpretation_func(
+                        result.total_score
+                    )  # Interpretation
+                else:
+                    row_cells[3].text = str(result.exam_score or "-")  # Exam
+                    row_cells[4].text = str(result.total_score or "-")  # Total
+                    row_cells[5].text = grade_calculator(result.total_score)  # Grade
+                    row_cells[6].text = interpretation_func(
+                        result.total_score
+                    )  # Interpretation
+            except Exception as e:
+                print(f"Error adding result row {result_idx}: {e}")
+
+        # Finalize document
         new_doc.save(output_path)
         print(f"Final document saved to {output_path}")
 
@@ -963,7 +1020,7 @@ def result_download(student_id):
         print(f"Error in result_download: {e}")
         abort(500, description="An error occurred while processing the request.")
     finally:
-        # Clean up the temporary file
+        # Clean up temporary file
         if "output_path" in locals() and os.path.exists(output_path):
             os.remove(output_path)
             print(f"Temporary file {output_path} deleted.")
