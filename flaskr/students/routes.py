@@ -1,5 +1,4 @@
 import os
-import shutil  # For moving files temporarily to static during development
 import tempfile
 
 # import pythoncom
@@ -129,109 +128,18 @@ def student_dashboard():
 
 
 # TODO: generate picture edit and save path
-# @students.route("/register-student", methods=["GET", "POST"])
-# @login_required
-# @requires_role("admin")
-# def student_register():
-#     form = StudentRegisterationForm()
-#     if form.validate_on_submit():
-#         if form.picture.data:
-#             picture = save_picture(form.picture.data)
-#             hashed_password = bcrypt.generate_password_hash(
-#                 form.last_name.data.lower()
-#             ).decode("utf-8")
-#             sID = student_identification(form.student_class.data)
-#             student = Student(
-#                 first_name=form.first_name.data,
-#                 middle_name=form.middle_name.data,
-#                 last_name=form.last_name.data,
-#                 dob=form.dob.data,
-#                 sex=form.sex.data,
-#                 email=form.email.data,
-#                 student_class=form.student_class.data,
-#                 department=form.department.data,
-#                 parent_number=form.parent_number.data,
-#                 address=form.address.data,
-#                 picture=picture,
-#                 password=hashed_password,
-#                 sID=sID,
-#             )
-#         else:
-#             hashed_password = bcrypt.generate_password_hash(
-#                 form.last_name.data.lower()
-#             ).decode("utf-8")
-#             sID = student_identification(form.student_class.data)
-#             student = Student(
-#                 first_name=form.first_name.data,
-#                 middle_name=form.middle_name.data,
-#                 last_name=form.last_name.data,
-#                 dob=form.dob.data,
-#                 sex=form.sex.data,
-#                 email=form.email.data,
-#                 student_class=form.student_class.data,
-#                 department=form.department.data,
-#                 parent_number=form.parent_number.data,
-#                 address=form.address.data,
-#                 password=hashed_password,
-#                 sID=sID,
-#             )
-#         db.session.add(student)
-#         db.session.commit()
-#         flash(
-#             f"{form.first_name.data} {form.last_name.data} has been successfully registered as a student!",
-#             "success",
-#         )
-#         return redirect(url_for("students.student_register"))
-#     return render_template("register-student.html", form=form)
-
-
 @students.route("/register-student", methods=["GET", "POST"])
 @login_required
 @requires_role("admin")
 def student_register():
     form = StudentRegisterationForm()
     if form.validate_on_submit():
-        print("Form validation successful.")
         if form.picture.data:
-            print("Picture data received.")
-            try:
-                # Save the picture temporarily in /tmp
-                picture_fn, temp_picture_path = save_picture(form.picture.data)
-                print(f"Picture saved temporarily: {temp_picture_path}")
-
-                # For development, move to static/profile_pics
-                static_profile_pics_path = os.path.join(
-                    current_app.root_path, "static", "profile_pics"
-                )
-                if not os.path.exists(static_profile_pics_path):
-                    os.makedirs(static_profile_pics_path, exist_ok=True)
-                    print(f"Created directory: {static_profile_pics_path}")
-
-                final_picture_path = os.path.join(static_profile_pics_path, picture_fn)
-                print(
-                    f"Moving picture from /tmp to static folder: {final_picture_path}"
-                )
-                shutil.move(
-                    temp_picture_path, final_picture_path
-                )  # Move from /tmp to static
-
-                picture = picture_fn
-            except Exception as e:
-                print(f"Error handling picture upload: {e}")
-                flash(f"Error uploading picture: {e}", "danger")
-                return redirect(request.url)
-        else:
-            print("No picture uploaded.")
-            picture = None  # No picture uploaded
-
-        try:
-            # Process student registration
+            picture = save_picture(form.picture.data)
             hashed_password = bcrypt.generate_password_hash(
                 form.last_name.data.lower()
             ).decode("utf-8")
             sID = student_identification(form.student_class.data)
-            print(f"Generated student ID: {sID}")
-
             student = Student(
                 first_name=form.first_name.data,
                 middle_name=form.middle_name.data,
@@ -247,22 +155,32 @@ def student_register():
                 password=hashed_password,
                 sID=sID,
             )
-            db.session.add(student)
-            db.session.commit()
-            print(
-                f"Student {form.first_name.data} {form.last_name.data} registered successfully."
+        else:
+            hashed_password = bcrypt.generate_password_hash(
+                form.last_name.data.lower()
+            ).decode("utf-8")
+            sID = student_identification(form.student_class.data)
+            student = Student(
+                first_name=form.first_name.data,
+                middle_name=form.middle_name.data,
+                last_name=form.last_name.data,
+                dob=form.dob.data,
+                sex=form.sex.data,
+                email=form.email.data,
+                student_class=form.student_class.data,
+                department=form.department.data,
+                parent_number=form.parent_number.data,
+                address=form.address.data,
+                password=hashed_password,
+                sID=sID,
             )
-            flash(
-                f"{form.first_name.data} {form.last_name.data} has been successfully registered as a student!",
-                "success",
-            )
-            return redirect(url_for("students.student_register"))
-        except Exception as e:
-            print(f"Error registering student: {e}")
-            flash(f"Error registering student: {e}", "danger")
-            return redirect(request.url)
-
-    print("Rendering registration form.")
+        db.session.add(student)
+        db.session.commit()
+        flash(
+            f"{form.first_name.data} {form.last_name.data} has been successfully registered as a student!",
+            "success",
+        )
+        return redirect(url_for("students.student_register"))
     return render_template("register-student.html", form=form)
 
 
@@ -1083,9 +1001,11 @@ def result_download(student_id):
                 else:
                     row_cells[3].text = str(result.exam_score or "-")  # Exam
                     row_cells[4].text = str(result.total_score or "-")  # Total
-                    row_cells[5].text = grade_calculator(result.total_score)  # Grade
+                    row_cells[5].text = grade_calculator(
+                        int(result.total_score)
+                    )  # Grade
                     row_cells[6].text = interpretation_func(
-                        result.total_score
+                        int(result.total_score)
                     )  # Interpretation
             except Exception as e:
                 print(f"Error adding result row {result_idx}: {e}")
