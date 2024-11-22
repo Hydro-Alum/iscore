@@ -6,19 +6,29 @@ from flask_login import UserMixin
 
 
 # TODO: to implement loader for teacher and student
+# @login_manager.user_loader
+# def load_user(user_id):
+#     management = Management.query.get(int(user_id))
+#     teacher = Teacher.query.get(int(user_id))
+#     student = Student.query.get(int(user_id))
+#     if management:
+#         return management
+#     elif student:
+#         return student
+#     elif teacher:
+#         return teacher
+#     else:
+#         abort(404)
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    management = Management.query.get(int(user_id))
-    teacher = Teacher.query.get(int(user_id))
-    student = Student.query.get(int(user_id))
-    if management:
-        return management
-    elif student:
-        return student
-    elif teacher:
-        return teacher
-    else:
-        abort(404)
+    # Try to load user from each table
+    for user_model in [Management, Teacher, Student]:
+        user = user_model.query.get(int(user_id))
+        if user:
+            return user
+    return None
 
 
 class Management(db.Model, UserMixin):
