@@ -67,9 +67,8 @@ def teacher_register():
                 tID=tID,
             )
         else:
-            hashed_password = bcrypt.generate_password_hash(
-                form.last_name.data.lower()
-            ).decode("utf-8")
+            password = form.last_name.data.lower() + "_ismc24"
+            hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
             tID = teacher_identification()
             teacher = Teacher(
                 first_name=form.first_name.data,
