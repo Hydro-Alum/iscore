@@ -1,0 +1,26 @@
+.student-info {
+    position: relative;
+    padding: 2rem;
+}
+
+.student-info__title {
+    margin: 2rem 0 1.2rem 0;
+    font-size: 1.8rem;
+}
+
+.student-details p {
+    color: rgb(40, 40, 173);
+    margin-bottom: 0.5rem;
+}
+
+.student-details p span {
+    font-weight: bold;
+}
+
+.student-info img {
+    width: 100px;
+    border: 2px solid black;
+    position: absolute;
+    top: 20%;
+    left: 42%;
+}

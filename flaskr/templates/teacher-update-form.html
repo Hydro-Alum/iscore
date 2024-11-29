@@ -1,0 +1,141 @@
+{% extends 'layout.html' %}
+
+{% block title %}Update Teacher's Profile{% endblock %}
+
+{% block content %}
+<div class="teacher-reg__wrapper">
+    <div class="teacher-reg__header">
+        <h1>TEACHER UPDATE PROFILE FORM</h1>
+    </div>
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.title.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.title(class="teacher-reg-input") }}
+                {% if form.title.errors %}
+                    {% for error in form.title.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.first_name.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.first_name(class="teacher-reg-input") }}
+                {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.middle_name.label }}
+                </div>
+                {{ form.middle_name(class="teacher-reg-input") }}
+                {% if form.middle_name.errors %}
+                    {% for error in form.middle_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.last_name.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.last_name(class="teacher-reg-input") }}
+                {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.sex.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.sex(class="teacher-reg-input") }}
+                {% if form.sex.errors %}
+                    {% for error in form.sex.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.email.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.email(class="teacher-reg-input") }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.section.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.section(class="teacher-reg-input") }}
+                {% if form.section.errors %}
+                    {% for error in form.section.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.picture.label }}
+                </div>
+                {{ form.picture(class="teacher-reg-input") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.phone_number.label }}
+                </div>
+                {{ form.phone_number(class="teacher-reg-input") }}
+                {% if form.phone_number.errors %}
+                    {% for error in form.phone_number.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="teacher-reg-labels">
+                    {{ form.address.label }}
+                </div>
+                {{ form.address(class="teacher-reg-input teacher-reg-textArea") }}
+                {% if form.address.errors %}
+                    {% for error in form.address.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.submit(class="reg-teacher__btn")}}
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

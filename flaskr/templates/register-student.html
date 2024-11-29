@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+
+{% block title %}Registeration{% endblock %}
+
+{% block content %}
+<div class="student-reg__wrapper">
+    <div class="student-reg__header">
+        <h1>STUDENT REGISTRATION FORM</h1>
+    </div>
+    <div>
+        <form action="" method="post" enctype="multipart/form-data" id="student-reg-form">
+            {{ form.hidden_tag() }}
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.first_name.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.first_name(class="student-reg-input") }}
+                {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.middle_name.label(class="student-reg-labels") }}
+                {{ form.middle_name(class="student-reg-input") }}
+                {% if form.middle_name.errors %}
+                    {% for error in form.middle_name.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.last_name.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.last_name(class="student-reg-input") }}
+                {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.dob.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.dob(class="student-reg-input") }}
+                {% if form.dob.errors %}
+                    {% for error in form.dob.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.sex.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.sex(class="student-reg-input") }}
+                {% if form.sex.errors %}
+                    {% for error in form.sex.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.email.label }}
+                </div>
+                {{ form.email(class="student-reg-input") }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.student_class.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.student_class(class="student-reg-input") }}
+                {% if form.student_class.errors %}
+                    {% for error in form.student_class.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.department.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.department(class="student-reg-input") }}
+                {% if form.department.errors %}
+                    {% for error in form.department.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.picture.label(class="student-reg-labels") }}
+                {{ form.picture(class="student-reg-input") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.parent_number.label }}
+                </div>
+                {{ form.parent_number(class="student-reg-input") }}
+                {% if form.parent_number.errors %}
+                    {% for error in form.parent_number.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.address.label(class="student-reg-labels") }}
+                {{ form.address(class="student-reg-input student-reg-textArea") }}
+                {% if form.address.errors %}
+                    {% for error in form.address.errors %}
+                        <span class="reg-error">{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.submit(class="reg-student__btn", id="submit-btn")}}
+            </div>
+
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='JS/delay-btn.js')}}"></script>
+</div>
+{% endblock %}

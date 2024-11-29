@@ -1,0 +1,50 @@
+{% extends "layout.html"%}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="card--wrapper">
+    <div class="card--container">
+        <a href="{{ url_for('students.student_dashboard')}}">
+            <h2 class="card--title">STUDENTS</h2>
+            <i class="fa fa-id-card"></i>
+            <h3 class="card--body">Student's Info</h3> 
+        </a>
+    </div>
+    <div class="card--container">
+        <a href="{{ url_for('teachers.teachers_dashboard')}}">
+            <h2 class="card--title">TEACHERS</h2>
+            <i class="fa fa-graduation-cap"></i>
+            <h3 class="card--body">Teacher's Info</h3>
+        </a>
+    </div>
+    <div class="card--container">
+        <a href="">
+            <h2 class="card--title">STAFFS</h2>
+            <i class="fa fa-users"></i>
+            <h3 class="card--body">Staff's Info</h3>
+        </a>
+    </div>
+    <div class="card--container">
+        <a href="">
+            <h2 class="card--title">MANAGEMENT</h2>
+            <i class="fa fa-sitemap"></i>
+            <h3 class="card--body">Management's Info</h3>
+        </a>
+    </div>
+    <div class="card--container">
+        <a href="{{ url_for('managements.school_session') }}">
+            <h2 class="card--title">SESSION/TERM</h2>
+            <i class="fa fa-window-maximize"></i>
+            <h3 class="card--body">Update Session/Term</h3>
+        </a>
+    </div>
+    <div class="card--container">
+        <a href="">
+            <h2 class="card--title">ANNOUNCEMENT</h2>
+            <i class="fa fa-bullhorn"></i>
+            <h3 class="card--body">Inform Students</h3>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+.result-header {
+    display: flex;
+    justify-content: center;
+}
+
+.result-header div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.download-result {
+    display: flex;
+    justify-content: right;
+}
+
+/* .download-result a {
+    text-decoration: none;
+    padding: 1rem;
+    border: 2px solid blue;
+    background-color: blue;
+    color: white;
+    border-radius: 10px;
+} */
+
+/* Base button styling */
+.download-result button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Hover effect */
+  .download-result button:hover {
+    background-color: #0069d9;
+    color: orange;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Active effect */
+  .download-result button:active {
+    background-color: #0056b3;
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+
+
+
+.download-result a:hover {
+    color: blue;
+    background-color: lightgray;
+}
+
+.table-wrapper {
+    width: 100%;
+}
+
+.table-header {
+    width: 100%;
+}
+
+
+.table-wrapper table {
+    border-collapse: collapse;
+    margin: 25px auto;
+    font-size: 1rem;
+    min-width: 900px;
+    border-radius: 10px 0 10px 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.table-wrapper table caption {
+    margin-bottom: 1rem;
+    color: rgb(12, 12, 80);
+}
+
+.table-wrapper table thead tr {
+    background-color: #072764;
+    color: #fff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.table-wrapper table th,
+.table-wrapper table td {
+    padding: 12px 15px;
+}
+
+.table-wrapper table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-wrapper table tbody tr td a {
+    text-decoration: none;
+    color: black;
+}
+
+.table-wrapper table tbody tr:nth-of-type(even) {
+    background-color: #fdfbfb;
+}
+
+.table-wrapper table tbody:last-of-type {
+    border-bottom: 2px solid blue;
+}
+
+.table-wrapper table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.table-wrapper table tbody tr:hover {
+    background-color: lightblue;
+}
+
+.table-wrapper table tbody tr td a:hover {
+    color: #f7f8f8;
+}

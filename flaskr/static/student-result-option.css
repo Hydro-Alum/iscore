@@ -1,0 +1,22 @@
+.check-result-option {
+    padding: 1rem;
+    width: 100%;
+}
+
+.check-result-option > div {
+    margin-bottom: 1rem;
+}
+
+.result-label, .result-input {
+    display: block;
+}
+
+.result-input {
+    width: 20rem;
+    padding: 3px;
+    margin-bottom: 0.5rem;
+}
+
+.result-btn {
+    margin-top: 1rem;
+}

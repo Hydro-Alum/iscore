@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block title %}Teachers Dashboard{% endblock %}
+
+{% block content %}
+    <div class="teacher-dashboard__wrapper">
+        <div><a href="{{ url_for('teachers.teacher_register') }}">Register Teacher</a></div>
+        <div><a href="{{ url_for('teachers.get_teachers') }}">All Teachers</a></div>
+        <div><a href="">Senior Teachers</a></div>
+        <div><a href="">Junior Teachers</a></div>
+    </div>
+{% endblock %}

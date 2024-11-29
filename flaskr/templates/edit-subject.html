@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Subject{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h1>Edit Subject</h1>
+    </div>
+    <div>
+        <form action="", method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.name.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.name(class="student-reg-input") }}
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.class_range.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.class_range(class="student-reg-input") }}
+                {% if form.class_range.errors %}
+                    {% for error in form.class_range.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.submit(class="reg-student__btn") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "student-profile-layout.html" %}
+
+{% block content %}
+    <input type="hidden" name="student-id" id="studentID" value="{{ student.id }}">
+    <div class="student-info">
+        <div class="student-info__title">
+            Student Details
+        </div>
+        <div class="student-details">
+            <p>Student's ID: <span>{{ student.sID}}</span></p>
+            <p>Name: <span>{{ student.last_name | title }} {{ student.first_name | title}} {{ student.middle_name | title }}</span></p>
+            <p>Age: <span>{{ (year - student.dob.year) | int }} yr old</span></p>
+            <p>Class: <span>{{ student.student_class | upper }}</span><p>
+            {% if student.sex|upper == 'M' %}
+                <p>Gender: <span>Male</span><p>
+            {% elif student.sex | upper %}
+                <p>Gender: <span>Female</span><p>
+            {% endif%}
+            <p>Date of Entry: <span>{{ student.date_joined.strftime("%Y-%m-%d") }}</span></p>
+            <p>Department: <span>{{ student.department | title }}</span></p>
+            <p>Email Address: <span>{{ student.email }}</span></p>
+            {% if student.parent_number %}
+                <p>Parent's phone number: <span>{{ student.parent_number }}</span></p>
+            {% endif %}
+            {% if student.address %}
+                <p>Student Address: <span>{{ student.address }}</span></p>
+            {% endif %}
+            <p>Extracurricular Activity: <span>NIL</span></p>
+            <p>Email Password (Your last name/surname, the alphabets in lowercase) : <span>{{ student.last_name|lower }}</span></p>
+        </div>
+        <img src="https://iscoreimages.s3.eu-north-1.amazonaws.com/profile_pics/{{student.picture}}" alt="">
+        <!-- <img src="{{ url_for('static', filename='profile_pics/' + student.picture)}}" alt=""> -->
+    </div>
+{% endblock %}

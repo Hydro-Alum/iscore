@@ -1,0 +1,49 @@
+{% extends "layout.html"%}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+
+<!-- <div class="result-download">
+    <a href="#">{{ class_range }} Students Result</a>
+</div> -->
+
+<div class="download-result">
+    <form action="{{url_for('students.results_download')}}" method="post">
+        <input type="hidden" name="session" value="{{ session }}">
+        <input type="hidden" name="term" value="{{ term }}">
+        <input type="hidden" name="class_range" value="{{ class_range }}">
+        <button type="submit">{{ class_range }} Result Download</button>
+    </form>
+</div>
+
+<input type="hidden" name="std_class" id="std_class" value="{{class_range}}">
+
+<div class="table-wrapper">
+    <table>
+        <caption><h1>{{ class_range }} STUDENTS</h1></caption>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Class</th>
+                <th>Student Dept.</th>
+            </tr>   
+        </thead>
+        <tbody id="students-tbody">
+            {% for student in students %}
+                <tr>
+                    <td>{{ students.index(student) + 1 }}</td>
+                    <td><a href="{{ url_for('students.student_profile', std_id=student.id )}}">{{ student.last_name|title }} {{ student.first_name|title }} {{ student.middle_name|title }}</a></td>
+                    <td><a href="#">{{ student.sID }}</a></td>
+                    <td><a href="#">{{ student.student_class }}</a></td>
+                    <td><a href="#">{{ student.department }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="{{ url_for('static', filename='JS/search.js') }}"></script>
+{% endblock %}

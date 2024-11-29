@@ -1,0 +1,26 @@
+.teacher-info {
+    position: relative;
+    padding: 1rem;
+}
+
+.teacher-info__title {
+    margin: 2rem 0 1.2rem 0;
+    font-size: 1.8rem;
+}
+
+.teacher-details p {
+    color: rgb(40, 40, 173);
+    margin-bottom: 0.5rem;
+}
+
+.teacher-details p span {
+    font-weight: bold;
+}
+
+.teacher-info img {
+    width: 100px;
+    border: 2px solid black;
+    position: absolute;
+    top: 20%;
+    right: 48%;
+}

@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div>
+    <div>
+        <h1>Start A New Academic Session</h1>
+        <P><b>PLEASE NOTE:</b> The current session is {{ current_session }}, Ensure you would like change {{ current_session }} to a new session!</P>
+    </div>
+    <div>
+        <form action="", method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.session.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.session(class="student-reg-input") }}
+                {% if form.session.errors %}
+                    {% for error in form.session.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.confirm_session.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.confirm_session(class="student-reg-input") }}
+                {% if form.confirm_session.errors %}
+                    {% for error in form.confirm_session.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.start_date.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.start_date(class="student-reg-input") }}
+                {% if form.start_date.errors %}
+                    {% for error in form.start_date.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div>
+                <div class="student-reg-labels">
+                    {{ form.end_date.label }}<span style="color:red">*</span>
+                </div>
+                {{ form.end_date(class="student-reg-input") }}
+                {% if form.end_date.errors %}
+                    {% for error in form.end_date.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+
+            <div>
+                {{ form.submit(class="reg-student__btn")}}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
