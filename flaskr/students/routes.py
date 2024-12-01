@@ -2,9 +2,7 @@ import os
 import io
 import tempfile
 import boto3
-
-# import pythoncom
-# import win32com.client as win32
+from botocore.exceptions import ClientError
 from datetime import datetime
 from sqlalchemy import desc
 from flask import (
@@ -497,6 +495,7 @@ def update_student_profile(std_id):
                 student.address = form.address.data
             if form.picture.data:
                 try:
+                    image_name = student.picture
                     picture_fn, temp_file_path = save_and_resize_picture(
                         form.picture.data
                     )
@@ -506,6 +505,21 @@ def update_student_profile(std_id):
                     )
 
                     print(f"Image uploaded successfully! URL: {s3_url}", "success")
+
+                    # deleting former image from bucket
+                    if image_name != "default.jpg":
+                        try:
+                            s3.delete_object(
+                                Bucket=S3_BUCKET, Key=f"profile_pics/{image_name}"
+                            )
+                            print(
+                                f"Image {image_name} deleted successfully from {S3_BUCKET}."
+                            )
+                        except ClientError as e:
+                            print(
+                                f"Error deleting image {image_name} from {S3_BUCKET}: {e}"
+                            )
+
                 except Exception as e:
                     print(f"Error uploading image: {e}", "danger")
                 finally:
@@ -545,10 +559,18 @@ def delete_student(std_id):
         try:
             db.session.delete(student)
             db.session.commit()
-            static_dir = os.path.join(current_app.root_path, "static")
-            image_path = os.path.join(static_dir, "profile_pics", f"{image_name}")
-            if os.path.exists(image_path) and image_name != "default.jpg":
-                os.remove(image_path)
+            # static_dir = os.path.join(current_app.root_path, "static")
+            # image_path = os.path.join(static_dir, "profile_pics", f"{image_name}")
+            # if os.path.exists(image_path) and image_name != "default.jpg":
+            #     os.remove(image_path)
+
+            if image_name != "default.jpg":
+                try:
+                    s3.delete_object(Bucket=S3_BUCKET, Key=f"profile_pics/{image_name}")
+                    print(f"Image {image_name} deleted successfully from {S3_BUCKET}.")
+                except ClientError as e:
+                    print(f"Error deleting image {image_name} from {S3_BUCKET}: {e}")
+
             flash(
                 f"{student.last_name} {student.first_name} profile has been deleted!",
                 "info",
@@ -1100,7 +1122,7 @@ def result_download(student_id):
         return send_file(
             output_stream,
             as_attachment=True,
-            download_name=f"{student.last_name}_{student.first_name}_report_card.docx",
+            download_name=f"{student.last_name}_{student.first_name}_{student.student_class}_report_card.docx",
         )
     except Exception as e:
         print(f"Error in result_download: {e}")
