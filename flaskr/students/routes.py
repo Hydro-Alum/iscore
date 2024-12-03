@@ -151,6 +151,7 @@ def student_register():
             except Exception as e:
                 print(f"Error uploading image: {e}", "danger")
 
+            # picture = save_picture(form.picture.data)
             hashed_password = bcrypt.generate_password_hash(
                 form.last_name.data.lower()
             ).decode("utf-8")

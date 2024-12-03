@@ -69,6 +69,9 @@ def login():
             )
             print("current_user from login:", current_user.role)
             return redirect(url_for("students.student_profile", std_id=student.id))
+        else:
+            flash("Incorrect Email or Password!", "danger")
+            return redirect(url_for("auths.login"))
 
     return render_template("login.html", form=form)
 

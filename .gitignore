@@ -7,3 +7,4 @@ migrations/
 /flaskr/teachers/__pycache__/
 /flaskr/managements/__pycache__/
 /flaskr/auths/__pycache__/
+/flaskr/main/__pycache__/
