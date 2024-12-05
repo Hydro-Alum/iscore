@@ -1,5 +1,7 @@
 {% extends "teacher-profile-layout.html" %}
 
+{% block title %}Score Upload{% endblock %}
+
 {% block content %}
 
 <div class="upload-wrapper table-wrapper">
@@ -12,7 +14,7 @@
         <input type="hidden" name="mode" value="{{ mode }}">
         <input type="hidden" name="subject" value="{{ subject }}">
         <input type="hidden" name="term" value="{{ term }}">
-        <input type="hidden" name="session" value="{{ session }}">
+        <input type="hidden" name="session" value="{{ session_val }}">
         <table>
             <caption>
                 <div >

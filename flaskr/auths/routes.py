@@ -11,7 +11,6 @@ auths = Blueprint("auths", __name__)
 @auths.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        print("current_user from login:", current_user.role)
         if current_user.role == "admin":
             flash("You are already logged in!", "info")
             return redirect(url_for("managements.dashboard"))

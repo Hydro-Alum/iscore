@@ -17,6 +17,7 @@ from flask import (
     send_from_directory,
     abort,
     send_file,
+    session,
 )
 from flask_login import login_required, current_user
 from flaskr import db, bcrypt
@@ -278,14 +279,14 @@ def score_upload_option():
             form.session.choices.append((each_session.session, each_session.session))
     form.session.choices.append(("2024/2025", "2024/2025"))
     if form.validate_on_submit():
-        session = form.session.data
+        session_val = form.session.data
         mode = form.mode.data
         term = form.term.data
         subject = form.subject.data
         student_class = form.student_class.data
         department = form.department.data
         if form.session.data == "current_session":
-            session = current_session()
+            session_val = current_session()
         if (
             student_class.upper() == "JS1"
             or student_class.upper() == "JS2"
@@ -299,28 +300,58 @@ def score_upload_option():
             students = Student.query.filter_by(
                 student_class=student_class, department=department
             ).all()
+        results = Result.query.filter_by(
+            subject=subject.lower().replace("-", " "), term=term, session=session_val
+        ).all()
+        result_mode = mode + "_score"
+        print(result_mode)
+
         if current_user.role == "teacher":
             return render_template(
                 "teacher-score-upload.html",
                 teacher=current_user,
                 students=students,
-                session=session,
+                session_val=session_val,
                 term=term,
                 mode=mode,
                 subject=subject.replace("-", " "),
                 student_class=student_class,
                 department=department,
+                results=results,
+                result_mode=result_mode,
+                getattr=getattr,
             )
         return render_template(
             "student-score-upload.html",
             students=students,
-            session=session,
+            session_val=session_val,
             term=term,
             mode=mode,
             subject=subject.replace("-", " "),
             student_class=student_class,
             department=department,
+            results=results,
+            result_mode=result_mode,
+            getattr=getattr,
         )
+    session_val = session.get("session_val")
+    if session_val:
+        form.session.data = session_val
+    term = session.get("term")
+    if term:
+        form.term.data = term
+    mode = session.get("mode")
+    if mode:
+        form.mode.data = mode
+    subject = session.get("subject")
+    if subject:
+        form.subject.data = subject
+    student_class = session.get("student_class")
+    if student_class:
+        form.student_class.data = student_class
+    department = session.get("department")
+    if department:
+        form.department.data = department
     if current_user.role == "teacher":
         return render_template(
             "teacher-upload-option.html", form=form, teacher=current_user
@@ -332,7 +363,7 @@ def score_upload_option():
 @login_required
 @requires_role("teacher")
 def score_upload():
-    session = request.form.get("session")
+    session_val = request.form.get("session")
     term = request.form.get("term")
     mode = request.form.get("mode")
     subject = request.form.get("subject")
@@ -364,7 +395,7 @@ def score_upload():
                 if (
                     student.id == result.student_id
                     and term == result.term
-                    and session == result.session
+                    and session_val == result.session
                     and subject == result.subject
                 ):
                     if mode.lower() == "test":
@@ -425,6 +456,12 @@ def score_upload():
     flash(
         f"{ student_class } { subject } { mode } score have been uploaded!", "success"
     )
+    session["session_val"] = session_val
+    session["term"] = term
+    session["mode"] = mode
+    session["subject"] = subject.lower().replace(" ", "-")
+    session["student_class"] = student_class
+    session["department"] = department
     return redirect(url_for("students.score_upload_option"))
 
 

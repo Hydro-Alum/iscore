@@ -46,7 +46,6 @@ def load_user_from_request(request):
     for user_model in [Management, Teacher, Student]:
         user = user_model.query.filter_by(email=email).first()
         if user:
-            print("User loaded from model:", user.role)
             return user
     return None
 

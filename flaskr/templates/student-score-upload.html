@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% block title %}Score Upload{% endblock %}
+
 {% block content %}
 
 <div class="upload-wrapper table-wrapper">
@@ -12,7 +14,7 @@
         <input type="hidden" name="mode" value="{{ mode }}">
         <input type="hidden" name="subject" value="{{ subject }}">
         <input type="hidden" name="term" value="{{ term }}">
-        <input type="hidden" name="session" value="{{ session }}">
+        <input type="hidden" name="session" value="{{ session_val }}">
         <table>
             <caption>
                 <div >
@@ -33,7 +35,20 @@
                         <td>{{ students.index(student) + 1 }}</td>
                         <td>{{ student.last_name }} {{ student.middle_name }} {{ student.first_name }}</td>
                         <td>{{ student.sID }}</td>
-                        <td><input type="number" name="{{ student.id }}" step="0.01" maxlength="3"  max="100" min="0"></td>
+                        {% set ns = namespace(match_found=False) %}
+                        {% for result in results %}
+                            {% if student.id == result.student_id %}
+                                {% set ns.match_found = True %}
+                                <td>
+                                    <input type="number" name="{{ student.id }}" step="0.01" maxlength="3" max="100" min="0" value="{{ getattr(result, result_mode) }}">
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        {% if not ns.match_found %}
+                            <td>
+                                <input type="number" name="{{ student.id }}" step="0.01" maxlength="3" max="100" min="0">
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
