@@ -66,7 +66,6 @@ def login():
                 f"Welcome back {student.last_name.title()} {student.first_name.title()}!",
                 "success",
             )
-            print("current_user from login:", current_user.role)
             return redirect(url_for("students.student_profile", std_id=student.id))
         else:
             flash("Incorrect Email or Password!", "danger")
