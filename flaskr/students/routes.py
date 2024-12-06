@@ -363,7 +363,7 @@ def score_upload_option():
 @login_required
 @requires_role("teacher")
 def score_upload():
-    session_val = request.form.get("session")
+    session_val = request.form.get("session", None)
     term = request.form.get("term")
     mode = request.form.get("mode")
     subject = request.form.get("subject")
