@@ -430,7 +430,7 @@ def score_upload():
                         total_score=score,
                         term=term,
                         subject=subject,
-                        session=session,
+                        session=session_val,
                         student_id=int(student.id),
                     )
                 elif mode.lower() == "exam":
@@ -439,7 +439,7 @@ def score_upload():
                         total_score=score,
                         term=term,
                         subject=subject,
-                        session=session,
+                        session=session_val,
                         student_id=int(student.id),
                     )
                 elif mode.lower() == "practical":
@@ -448,7 +448,7 @@ def score_upload():
                         total_score=score,
                         term=term,
                         subject=subject,
-                        session=session,
+                        session=session_val,
                         student_id=int(student.id),
                     )
                 db.session.add(result)
