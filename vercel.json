@@ -10,12 +10,5 @@
             "src": "/(.*)",
             "dest": "run.py"
         }
-    ],
-    "redirects": [
-        {
-            "source": "https://www.iscore.vercel.app/:path*",
-            "destination": "https://iscore.vercel.app/:path*",
-            "permanent": true
-        }
     ]
 }
