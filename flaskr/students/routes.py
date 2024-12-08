@@ -369,16 +369,11 @@ def score_upload():
     subject = request.form.get("subject")
     student_class = request.form.get("student_class")
     department = request.form.get("department", None)
-    results = Result.query.all()
+    results = Result.query.filter_by(
+        subject=subject.lower().replace("-", " "), term=term, session=session_val
+    ).all()
     student_info_exist = False
-    if (
-        department == "NONE"
-        or department == "none"
-        or department == "None"
-        or department == "all"
-        or department == "ALL"
-        or department == "All"
-    ):
+    if department.lower() == "none" or department.lower() == "all":
         department = None
     if department:
         students = Student.query.filter_by(

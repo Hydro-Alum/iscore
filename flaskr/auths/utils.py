@@ -15,7 +15,6 @@ def requires_role(role):
         @wraps(f)
         def wrapper(*args, **kwargs):
             if current_user.role == role or current_user.role == "admin":
-                print("current_user is:", current_user.role)
                 return f(*args, **kwargs)
             else:
                 abort(403)
