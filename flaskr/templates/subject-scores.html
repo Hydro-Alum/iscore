@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}Subject Score View{% endblock %}
+
+{% block content %}
+<div class="modal hidden" id="modal">
+    <div class="modal-popup" id="modal-popup">
+        <h3>Would you like to Delete score permanently?</h3>
+        <h4>To continue type <b style="color: red;">DELETE</b> in all uppercase</h4>
+        <input type="text" name="modal-delete-input" id="modal-delete-input">
+        <button type="submit" class="modal-submit-btn" id="modal-submit-btn" name="modal-submit-btn">Delete</button>
+        <button type="button" class="modal-btn-close" id="modal-close-btn" >&times;</button>
+    </div>
+</div>
+<div class="result-header">
+    <h1>{{ session }} SESSION {{ term|upper }} TERM {{ Subject }} RESULT</h1>
+</div>
+<div class="table-wrapper">
+    <table>
+        <caption><h1><span>{{ student_class|upper }}</span> STUDENTS <span>{{ subject|upper }}</span> RESULTS</h1></caption>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Test</th>
+                {% if department_exit and department|lower == "science" %}
+                    <th>Practical</th>
+                {% endif %}
+                <th>Exam</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th style="color: red;">Delete Score</th>
+            </tr>   
+        </thead>
+        <tbody>
+            {% for result in results %}
+                    <tr>
+                        <td>{{ results.index(result) + 1}}</td>
+                        <td><a href="{{ url_for('students.student_profile', std_id=result.student_id )}}">{{ result.student.last_name|title }} {{ result.student.first_name|title }} {{ result.student.middle_name|title }}</a></td>
+                        <td><a href="#">{{ result.student.sID }}</a></td>
+                        <td>{% if not result.test_score == None %}{{ result.test_score }}{% else %}-{% endif %}</td>
+                        {% if department_exit and department | lower == 'science' %}
+                            <td>{% if not result.practical_score == None %}{{ result.practical_score }}{% else %}-{% endif %}</td>
+                        {% endif %}
+                        <td>{% if not result.exam_score == None %}{{ result.exam_score }}{% else %}-{% endif %}</td>
+                        <td>{% if not result.total_score == None %}{{ result.total_score }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if department | lower == 'science' %}
+                                {% if result.test_score and result.exam_score %}
+                                    {% if result.total_score | int >= 70 %}A
+                                    {% elif result.total_score | int >= 60 %}B
+                                    {% elif result.total_score | int >= 50 %}C
+                                    {% elif result.total_score | int >= 40 %}D
+                                    {% elif result.total_score | int < 40 %}F
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% else %}
+                                {% if result.test_score and result.exam_score %}
+                                    {% if result.total_score | int >= 70 %}A
+                                    {% elif result.total_score | int >= 60 %}B
+                                    {% elif result.total_score | int >= 50 %}C
+                                    {% elif result.total_score | int >= 40 %}D
+                                    {% elif result.total_score | int < 40 %}F
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td><button type="button" class="delete-score" data-item-id="{{result.id}}">&times;</button></td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    <script src="{{ url_for('static', filename='JS/subject-score-modal.js') }}"></script>
+</div>
+{% endblock %}

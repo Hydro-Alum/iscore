@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/iscore-favicon.png' ) }}">
+    <title>{% block title%}Home{% endblock%}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-registeration.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teacher-registeration.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-dashboard.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teachers-dashboard.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='students.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teachers.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='score-upload.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashed.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='subjects.css' ) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+</head>
+<body>
+
+    <!-- sidebar -->
+    <div class="sidebar">
+        <div class="logo"></div>
+        <ul class="menu">
+            <li class="active">
+                <a href="{{ url_for('managements.dashboard') }}">
+                    <i class="fa fa-tachometer"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('students.student_register')}}">
+                    <i class="fa fa-user"></i>
+                    <span>Register Student</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('managements.subject_view') }}">
+                    <i class="fa fa-book"></i>
+                    <span>Subjects</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-bullhorn"></i>
+                    <span>Announcement</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-calendar"></i>
+                    <span>Time-Table</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main.home_page') }}">
+                    <i class="fa fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="{{ url_for('auths.logout')}}">
+                    <i class="fa fa-sign-out"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- header -->
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <span>School</span>
+                <h2>Dashboard</h2>
+            </div>
+            <div class="user--info">
+                <div class="search--box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" name="search-input" class="search-input" placeholder="search">
+                </div>
+                {% if current_user.image == "default.jpg"%}
+                    <img src="{{ url_for('static', filename='images/iscore_logo.png')}}" alt="user image">
+                {% else%}
+                    <img src="{{ url_for('static', filename='profile_pics/' + current_user.image) }}" alt="user image">
+                {% endif %}
+            </div>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" id="alert-btn" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" id="close-btn" >&times;</button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='JS/alert.js')}}"></script>
+</body>
+</html>

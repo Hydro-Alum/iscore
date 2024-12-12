@@ -1,0 +1,3 @@
+INSERT INTO managements (first_name, last_name, email, password, image, role) VALUES ('Olajide', 'Oladunjoye', 'oladunjoyeolajide18@gmail.com', '$2b$12$uET8T703uMK1qbY42eRjeeMIz52oENXIry5mjZlxcDZKNPwAteZyW', 'default.jpg', 'admin');
+INSERT INTO managements (first_name, last_name, email, password, image, role) VALUES ('Oscar', 'Augustine', 'iscoremodelcollege@gmail.com', '$2b$12$l12J1nUqREj2CW638kx.2.pgctGrIPa324R0B3jld1rp6PxWJwEYu', 'default.jpg', 'admin');
+INSERT INTO managements (first_name, last_name, email, password, image, role) VALUES ('Ayombo', 'Olusola', 'Onyiyiozaayo@gmail.com', '$2b$12$l12J1nUqREj2CW638kx.2.pgctGrIPa324R0B3jld1rp6PxWJwEYu', 'default.jpg', 'admin');

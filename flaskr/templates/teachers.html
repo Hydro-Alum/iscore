@@ -1,0 +1,35 @@
+{% extends "layout.html"%}
+
+{% block title %}Teachers{% endblock %}
+
+{% block content %}
+
+<!-- <div class="result-download">
+    <a href="#">{{ class_range }} Students Result</a>
+</div> -->
+
+<div class="table-wrapper">
+    <table>
+        <caption><h1>Iscore Model College Teachers</h1></caption>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Teachers ID</th>
+                <th>Section</th>
+            </tr>   
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teachers.index(teacher) + 1 }}</td>
+                    <td><a href="{{ url_for('teachers.teacher_profile', teacher_id=teacher.id )}}">{{ teacher.title|title }} {{ teacher.last_name|title }} {{ teacher.first_name|title }} {{ teacher.middle_name|title }}</a></td>
+                    <td><a href="#">{{ teacher.tID }}</a></td>
+                    <td><a href="#">{{ teacher.section }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

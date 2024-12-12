@@ -1,0 +1,33 @@
+{% extends "student-profile-layout.html" %}
+
+{% block content %}
+    <div class="check-result-option">
+        <div>
+            <h1>Check Result</h1>
+        </div>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.session.label(class="result-labels") }}<span style="color:red">*</span>
+                {{ form.session(class="result-input") }}
+                {% if form.session.errors %}
+                    {% for error in form.session.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div>
+                {{ form.term.label(class="result-labels") }}<span style="color:red">*</span>
+                {{ form.term(class="result-input") }}
+                {% if form.term.errors %}
+                    {% for error in form.term.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                {% endif%}
+            </div>
+            <div class="result-btn">
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

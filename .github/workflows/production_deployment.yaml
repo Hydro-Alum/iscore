@@ -1,0 +1,135 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+env:
+  python-version: "3.10"
+  app-name: iscore
+
+jobs:
+  build:
+    name: Building Artifact
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.python-version }}
+    - name: Install dependencies
+      run: |
+        echo "${{ secrets.ENV }}" > .env
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    # - name: Lint with flake8
+    #   run: |
+    #     # stop the build if there are Python syntax errors or undefined names
+    #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Building Artifact
+      run: |
+        set NEXT_TELEMETRY_DISABLED=1
+        rm -rf .git 
+        rm -rf .github
+        rm -rf .idea
+        rm -rf .mypy_cache
+        rm -rf .pytest_cache
+        rm -rf .ruff_cache
+        rm -rf __pycache__
+        rm -rf htmlcov 
+        mkdir ../artifact
+        tar -czf ../artifact/artifact-${GITHUB_SHA::7}.tar.gz .
+        cp ../artifact/*.tar.gz .
+    - name: Saving the artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: |
+          **.tar.gz
+
+    - name: Set build status to success
+      if: success()
+      run: echo "Build succeeded"
+    - name: Set build status to failure
+      if: failure()
+      run: echo "Build failed"
+
+  deploy:
+      name: Deployment to  Production
+      runs-on: ubuntu-22.04
+      needs: build
+      env:
+          server: ${{ secrets.USER }}@${{ secrets.SERVER }}
+          artifact-path: /home/${{ secrets.USER }}/artifacts
+          home-dir: /home/${{ secrets.USER }}
+          backend-dir: /home/${{ secrets.USER }}/app
+          target: ${{ secrets.USER }}@${{ secrets.SERVER }}:/home/${{ secrets.USER }}/artifacts
+      steps:
+        - uses: actions/download-artifact@v4
+          with:
+            name: dist
+        - name: Setup SSH Agent
+          uses: webfactory/ssh-agent@v0.9.0
+          with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        - name: Uploading artifact to server
+          run: |
+            ls -la  
+            scp -o StrictHostKeyChecking=no artifact-${GITHUB_SHA::7}.tar.gz ${{ env.target }}/latest.tar.gz
+        - name: Connect to server
+          run: ssh -o StrictHostKeyChecking=no ${{ env.server }}
+
+        - name: Remove existing backend directory (if exists)
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              rm -rf ${{ env.backend-dir }}
+            EOF
+
+        - name: Create backend directory
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              mkdir -p ${{ env.backend-dir }}
+            EOF
+
+        - name: Download and extract application archive
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              cd ${{ env.artifact-path }}
+              tar -xzf latest.tar.gz -C ${{ env.backend-dir }}
+            EOF
+
+        - name: Change directory to home
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              cd ${{ env.home-dir }}
+            EOF
+
+        - name: Create virtual environment
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              python3 -m venv venv
+            EOF
+
+        - name: Activate venv, Install dependencies 
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              source venv/bin/activate
+              pip install -r ${{ env.backend-dir }}/requirements.txt
+            EOF
+
+        - name: Update DBS and restart application using PM2
+          run: |
+            ssh ${{ env.server }} << 'EOF'
+              cd ${{ env.backend-dir }}
+              source ../venv/bin/activate
+              flask db upgrade
+              pm2 restart ecosystem.config.js
+            EOF

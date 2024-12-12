@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/iscore-favicon.png' ) }}">
+    <title>{% block title %}Students Profile{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-profile-layout.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-profile.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-result-option.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='student-result.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashed.css' ) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+</head>
+<body>
+    <div class="modal hidden" id="modal">
+        <div class="modal-popup" id="modal-popup">
+            <h3>Would you like to Delete {{ student.last_name}} {{ student.first_name}} permanently?</h3>
+            <h4>To continue type <b style="color: red;">DELETE</b> in all uppercase</h4>
+            <input type="text" name="modal-delete-input" id="modal-delete-input">
+            <button type="submit" class="modal-submit-btn" id="modal-submit-btn" name="modal-submit-btn">Delete</button>
+            <button type="button" class="modal-btn-close" id="modal-close-btn" >&times;</button>
+
+        </div>
+    </div>
+    <nav class="sch-profile__nav">
+        <div class="sch-top__header">
+            <div class="sch-logo">
+                <img src="{{ url_for('static', filename='images/iscore_logo.png')}}" alt="school logo">
+            </div>
+            <div class="sch-title">
+                <p>Iscore Model College</p>
+                <p>Student Information Portal</p>
+            </div>
+        </div>
+        <div class="nav-header">
+            <div class="left-header">
+                <ul>
+                    <li><a href="{{ url_for('main.home_page') }}">Home</a></li>
+                    <li><a href="">FAQs</a></li>
+                    <li><a href="">Attendance</a></li>
+                    <li><a href="">Contact Us</a></li>
+                    {% if current_user.role == "admin" %}
+                        <li><a href="{{ url_for('managements.dashboard') }}">Dashboard</a></li>                    
+                    {% endif %}
+                    {% if current_user.role == "admin" %}
+                        <li><a href="{{ url_for('students.student_dashboard') }}">Student's Dashboard</a></li>                    
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="right-header">
+                <p>
+                    <span>Welcome:</span>
+                    {{ student.last_name | title }} {{ student.first_name | title }} {{ student.middle_name | title }}
+                    <a href="{{ url_for('auths.logout')}}">Sign Out</a>
+                </p>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="student-profile__content">
+        <nav class="student-profile__sidebar">
+            <div class="sidebar__content">
+                <div class="sidebar__main">
+                    <div class="sidebar__title">
+                        Profile Menu
+                    </div>
+                    <div class="sidebar__items">
+                        <ul>
+                            <li><a href="{{ url_for('students.student_profile', std_id=student.id) }}">Profile Page</a></li>
+                            <li><a href="{{ url_for('main.home_page') }}">Home</a></li>
+                            <li><a href="{{ url_for('students.result_view', std_id=student.id) }}">Check Result</a></li>
+                            <li><a href="">Complaints</a></li>
+                            <li><a href="">Notice Board</a></li>
+                            <li><a href="">Pay School Fees</a></li>
+                            {% if current_user.role == "admin" %}
+                                <li><a href="{{ url_for('students.update_student_profile', std_id=student.id)}}" style="color: rgb(201, 201, 85);">Update Student Profile</a></li>                    
+                            {% endif %}
+                            {% if current_user.role == "admin" %}
+                                <li><button type="submit" id="delete-btn">De-register Student</button></li>                    
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="sidebar-sign-out">
+                    <a href="{{ url_for('auths.logout') }}">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="student-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" id="alert-btn" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" id="close-btn" >&times;</button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-div__left">
+                <a href="#">Terms and Condition of Use</a>
+                <a href="#">Lecture Time tables</a>
+                <a href="#">FAQ</a>
+                <a href="#">Privacy Statement</a>
+            </div>
+            <div class="footer-div__right">
+                <a href="#">Examination Time Table</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Student Help</a>
+                <a href="#">Staff Help</a>
+            </div>
+        </div>
+        <p>© 2022-2025 Icore Model College</p>
+    </footer>
+    <script src="{{ url_for('static', filename='JS/alert.js')}}"></script>
+    <script src="{{ url_for('static', filename='JS/modal.js')}}"></script>
+</body>
+</html>

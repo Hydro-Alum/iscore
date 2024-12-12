@@ -1,0 +1,25 @@
+{% extends "teacher-profile-layout.html" %}
+
+{% block content %}
+    <input type="hidden" name="teacher-id" id="teacherID" value="{{ teacher.id }}">
+    <div class="teacher-info">
+        <div class="teacher-info__title">
+            Teachr's Details
+        </div>
+        <div class="teacher-details">
+            <p>Teacher's ID: <span>{{ teacher.tID}}</span></p>
+            <p>Name: <span>{{ teacher.last_name | title }} {{ teacher.first_name | title}} {{ teacher.middle_name | title }}</span></p>
+            {% if teacher.sex|upper == 'M' %}
+                <p>Gender: <span>Male</span><p>
+            {% elif teacher.sex | upper %}
+                <p>Gender: <span>Female</span><p>
+            {% endif%}
+            <p>Date Of Employment: <span>{{ teacher.date_joined.strftime("%Y-%m-%d") }}</span></p>
+            <p>Department/Category: <span>{{ teacher.section | title }}</span></p>
+            <p>Email Address: <span>{{ teacher.email }}</span></p>
+            <p>Extracurricular Activity: <span>NIL</span></p>
+            <p>Email Password (Your login passweord is) : <span>{{ teacher.last_name|lower }}_ismc24</span></p>
+        </div>
+        <img src="https://iscoreimages.s3.eu-north-1.amazonaws.com/profile_pics/{{teacher.picture}}" alt="">
+    </div>
+{% endblock %}

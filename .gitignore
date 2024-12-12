@@ -1,0 +1,9 @@
+env/
+/flaskr/__pycache__/
+flaskr/.env
+.vscode/
+/flaskr/students/__pycache__/
+/flaskr/teachers/__pycache__/
+/flaskr/managements/__pycache__/
+/flaskr/auths/__pycache__/
+/flaskr/main/__pycache__/

@@ -1,0 +1,87 @@
+{% extends "student-profile-layout.html" %}
+
+{% block content %}
+    <div class="result-header">
+        <div>
+            <h1>{{ student.last_name | title }} {{ student.first_name | title }} {{ student.middle_name | title }}</h1>
+            <h2>{{ session }} Session {{ term }}-Term Result</h2>
+        </div>
+    </div>
+
+    <!-- {% if current_user.role=="admin" %}
+        <div class="download-result">
+            <a href="">Download Result</a>
+        </div>
+    {% endif %} -->
+
+    {% if current_user.role=="admin" %}
+        <div class="download-result">
+            <form action="{{ url_for('students.result_download', student_id=student.id) }}" method="post">
+                <input type="hidden" name="session" value="{{ session }}">
+                <input type="hidden" name="term" value="{{ term }}">
+                <button type="submit">Download</button>
+            </form>
+        </div>
+    {% endif %}
+
+
+
+    <div class="table-wrapper result-wrapper">
+        <table>
+            <caption>Your {{ session }} {{ term }}-Term Result</caption>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Subject</th>
+                    <th>Test</th>
+                    {% if student.department | lower == 'science' %}
+                        <th>Practical</th>
+                    {% endif %}
+                    <th>Exam</th>
+                    <th>Total</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ results.index(result) + 1}}</td>
+                        <td>{{ result.subject | upper }}</td>
+                        <td>{% if not result.test_score == None %}{{ result.test_score }}{% else %}-{% endif %}</td>
+                        {% if student.department | lower == 'science' %}
+                            <td>{% if not result.practical_score == None %}{{ result.practical_score }}{% else %}-{% endif %}</td>
+                        {% endif %}
+                        <td>{% if not result.exam_score == None %}{{ result.exam_score }}{% else %}-{% endif %}</td>
+                        <td>{% if not result.total_score == None %}{{ result.total_score }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if student.department | lower == 'science' %}
+                                {% if result.test_score and result.exam_score %}
+                                    {% if result.total_score | int >= 70 %}A
+                                    {% elif result.total_score | int >= 60 %}B
+                                    {% elif result.total_score | int >= 50 %}C
+                                    {% elif result.total_score | int >= 40 %}D
+                                    {% elif result.total_score | int < 40 %}F
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% else %}
+                                {% if result.test_score and result.exam_score %}
+                                    {% if result.total_score | int >= 70 %}A
+                                    {% elif result.total_score | int >= 60 %}B
+                                    {% elif result.total_score | int >= 50 %}C
+                                    {% elif result.total_score | int >= 40 %}D
+                                    {% elif result.total_score | int < 40 %}F
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

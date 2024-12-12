@@ -1,0 +1,78 @@
+.student-reg__wrapper {
+    width: 100%;
+    padding: 1rem;
+}
+
+.student-reg__header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.student-reg__header h1 {
+    color: rgb(12, 12, 80);
+}
+
+.student-reg-input {
+    display: block;
+    width: 35rem;
+    padding: 3px;
+    margin: 0 1px;
+    font-family: inherit;
+}
+
+.student-reg-labels {
+    display: block;
+    margin: 0;
+    margin-top: 1rem;
+}
+
+.student-reg-textArea {
+    height: 5rem;
+}
+
+.reg-error {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.reg-student__btn {
+    margin-top: 0.8rem;
+    color: black;
+    background: rgb(97, 217, 233);
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 3px;
+    box-shadow: 0 8px 5px -5px rgba(0, 0, 0, 0.2);
+    display: grid;
+    place-content: center;
+    transition: all 0.5s ease-out;
+}
+
+.reg-student__btn:hover {
+    transform: scale(1.01);
+    color: black;
+    background-color: #fff;
+}
+
+/* .loading-btn {
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #fff;
+    animation: rot 1s ease infinite;
+}
+
+@keyframes rot {
+    0% {
+        transform: rotate(0turn);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+} */
+
+.red-border {
+    border: 1px solid red;
+}

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Students Dashboard{% endblock %}
+
+{% block content %}
+    <div class="student-dashboard__wrapper">
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='all-students')}}">ALL STUDENTS</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='js-1')}}">JSS 1</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='js-2')}}">JSS 2</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='js-3')}}">JSS 3</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='ss-1')}}">SSS 1</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='ss-2')}}">SSS 2</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.get_students', student_info='ss-3')}}">SSS 3</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.student_register')}}">Register New Student</a>
+        </div>
+        <div>
+            <a href="{{ url_for('students.subject_scores_option') }}">View Student Scores</a>
+        </div>
+        <div><a href="{{ url_for('students.score_upload_option') }}">Upload Student Score</a></div>
+        
+
+        <!-- <div class="upload-student-btn"><a href="{{ url_for('students.score_upload_option') }}"><span>Upload Student Score</span></a></div> -->
+    </div>
+{% endblock %}

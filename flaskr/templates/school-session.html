@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="student-dashboard__wrapper">
+    <div class="sch-seesion"><a href="{{ url_for('managements.new_session') }}">Create New Session</a></div>
+    <div class="sch-seesion"><a href="">Update Current Term</a></div>
+    <div class="update-seesion"><a href="">Update Session</a></div>
+</div>
+
+{% endblock %}

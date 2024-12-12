@@ -1,0 +1,86 @@
+{% extends "teacher-profile-layout.html" %}
+
+
+{% block content %}
+    <div class="teacher-reg__wrapper">
+        <div class="teacher-reg__header">
+            <h1>STUDENTS RESULT/SCORE UPLOAD</h1>
+            <P>Select None in department for Junior Students(JSS)</P>
+        </div>
+        <div>
+            <form action="", method="post">
+                {{ form.hidden_tag() }}
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.session.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.session(class="teacher-reg-input") }}
+                    {% if form.session.errors %}
+                        {% for error in form.session.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.term.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.term(class="teacher-reg-input") }}
+                    {% if form.term.errors %}
+                        {% for error in form.term.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.mode.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.mode(class="teacher-reg-input") }}
+                    {% if form.mode.errors %}
+                        {% for error in form.mode.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.student_class.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.student_class(class="teacher-reg-input") }}
+                    {% if form.student_class.errors %}
+                        {% for error in form.student_class.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+    
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.department.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.department(class="teacher-reg-input") }}
+                    {% if form.department.errors %}
+                        {% for error in form.department.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="teacher-reg-labels">
+                        {{ form.subject.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.subject(class="teacher-reg-input") }}
+                    {% if form.subject.errors %}
+                        {% for error in form.subject.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    {{ form.submit(class="reg-teacher__btn")}}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock%}

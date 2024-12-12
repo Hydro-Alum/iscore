@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}Score Upload{% endblock %}
+
+{% block content %}
+
+<div class="upload-wrapper table-wrapper">
+    <div class="upload-header">
+        <h1><span>{{ mode|upper }}</span> {{ subject|upper }} SCORES FOR {{ student_class|upper }} {% if department and not department =="all" %}{{ department|upper }}{% endif %}</h1>
+    </div>
+    <form action="{{ url_for('students.score_upload') }}", method="post">
+        <input type="hidden" name="student_class" value="{{ student_class }}">
+        <input type="hidden" name="department" value="{{ department }}">
+        <input type="hidden" name="subject" value="{{ subject }}">
+        <input type="hidden" name="term" value="{{ term }}">
+        <input type="hidden" name="session" value="{{ session_val }}">
+        <table>
+            <caption>
+                <div >
+                    <h2>INPUT RAW {{ subject|upper }} SCORES</h2>
+                </div>
+            </caption>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Student</th>
+                    <th>Student ID</th>
+                    <th>Test Score</th>
+                    {% if department | lower == 'science' %}
+                        <th>Practical Score</th>
+                    {%endif %}
+                    <th>Exam Score</th>
+                </tr>   
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ students.index(student) + 1 }}</td>
+                        <td>{{ student.last_name }} {{ student.middle_name }} {{ student.first_name }}</td>
+                        <td>{{ student.sID }}</td>
+                        {% set ns = namespace(match_found=False) %}
+                        {% for result in results %}
+                            {% if student.id == result.student_id %}
+                                {% set ns.match_found = True %}
+                                <td>
+                                    <input type="number" name="test_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0" value="{{ result.test_score}}">
+                                </td>
+                                {% if department | lower == 'science' %}
+                                    <td>
+                                        <input type="number" name="practical_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0" value="{{ result.practical_score }}">
+                                    </td>
+                                {%endif %}
+                                <td>
+                                    <input type="number" name="exam_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0" value="{{ result.exam_score }}">
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        {% if not ns.match_found %}
+                            <td>
+                                <input type="number" name="test_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0">
+                            </td>
+
+                            {% if department | lower == 'science' %}
+                                <td>
+                                    <input type="number" name="practical_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0">
+                                </td> 
+                            {%endif %}
+                            <td>
+                                <input type="number" name="exam_{{ student.id }}" step="0.01" maxlength="3" max="100" min="0">
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="upload-btn">
+            <input type="submit" value="Upload Score">
+        </div>
+    </form>
+    
+</div>
+
+{% endblock%}

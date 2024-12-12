@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+.sch-top__header {
+    display: flex;
+    vertical-align: middle;
+    background-color: #c3c3f5;
+    padding: 1rem;
+}
+
+.sch-logo {
+    margin-right: 1.5rem;
+}
+.sch-logo img {
+    width: 80px;
+}
+
+.sch-title {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+.sch-title p {
+    font-size: 1.8rem;
+    color: rgb(12, 12, 80);
+}
+
+.nav-header {
+    background-color: rgb(12, 12, 80);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-header ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+
+.left-header ul li a {
+    text-decoration: none;
+    color: orange;
+}
+
+.left-header ul li a:hover {
+    color: white;
+    border-bottom: 2px solid white;
+}
+
+.right-header p {
+    color: blue;
+}
+.right-header p span {
+    color: orange;
+}
+
+.right-header p a {
+    text-decoration: none;
+    color: orange;
+}
+
+.right-header p a:hover {
+    color: white;
+    border-bottom: 2px solid white;
+}
+
+
+
+/* __teacher Profile content */
+.teacher-profile__content {
+    background-color: #d7d7d8;
+    display: flex;
+    /* width: 80%;
+    margin: 0 auto; */
+}
+
+.teacher-profile__sidebar {
+    height: 70vh;
+    width: 18%;
+    background-color: #e2eaec;
+    padding-left: 1rem;
+    padding-top: 1rem;
+}
+
+.sidebar__content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar__title {
+    font-size: 1.6rem;
+    color: rgb(252, 170, 19);
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.sidebar__items {
+    border: 1px solid rgb(192, 189, 189);
+    border-radius: 5px;
+    padding: 0.1rem;
+}
+
+.sidebar__items ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar__items ul li {
+    padding: 0.3rem;
+    /* transition: border 0.5s ease-in-out; */
+}
+
+.sidebar__items ul li:hover {
+    background-color: #cdcdd4;
+    border: 1px solid #ceceda ;
+    border-radius: 3px;
+}
+
+.sidebar__items ul li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: 100%;
+}
+
+.sidebar__items ul li button {
+    border: none;
+    text-align: left;
+    background: transparent;
+    color: red;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+}
+
+.sidebar-sign-out {
+    display: flex;
+    border-radius: 5px;
+    width: 80%;
+    background-color: rgb(21, 21, 139);
+    margin-bottom: 0.2rem;
+}
+
+.sidebar-sign-out a {
+    text-decoration: none;
+    padding: 0.5rem;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.sidebar-sign-out a:hover {
+    color: orange;
+}
+
+.sidebar-sign-out a span {
+    margin-left: 8px;
+}
+
+.teacher-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+/* __footer__ */
+.footer {
+    background-color: black;
+    border: 2px solid black;
+    padding: 3px;
+}
+
+.footer-content {
+    display: flex;
+    gap: 10rem;
+}
+
+.footer-div__left, .footer-div__right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.footer-div__left a{
+    text-decoration: none;
+    color: blue;
+    font-size: 0.8rem;
+}
+
+.footer-div__right a {
+    text-decoration: none;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.footer-div__right a:last-of-type {
+    color: blue;
+}
+
+.footer p {
+    margin-top: 1rem;
+    color: white;
+    font-size: 0.8rem;
+}
+
+/* modal */
+
+.tch-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 10;
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tch-modal-popup {
+    position: relative;
+    font-family: inherit;
+    z-index: 15;
+    background-color: white;
+    width: 600px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.tch-modal .tch-modal-submit-btn {
+    padding: 10px 30px;
+    background-color: #2984b9;
+    color: white;
+    border: 1px solid #2984b9;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.5s ease-in-out;
+}
+
+.tch-modal input {
+    padding: 3px;
+}
+
+.tch-modal .tch-modal-submit-btn:hover {
+    color: red;
+    background-color: #027ac0;
+    transform: scale(1.02);
+}
+
+.tch-modal-popup .tch-modal-btn-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/iscore-favicon.png' ) }}">
+    <title>iscore academy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css' ) }}">
+</head>
+<body>
+    <nav>
+        <div class="sch-heading">
+            <div class="sch-logo">
+                <img src="{{ url_for('static', filename='images/iscore_logo.png')}}" alt="school logo">
+            </div>
+            <div class="sch-title">
+                <p>ISCORE MODEL COLLEGE</p>
+                <!-- <p> Welcome To Iscore Model Coolege</p> -->
+            </div>
+            <!-- <h1 class="sch-name">ISCORE MODEL COLLEGE</h1> -->
+        </div>
+        <div class="nav-btns">
+            <span class="nav-span-left">
+                <a href="/" class="nav-btn-left">Home</a>
+                <a href="#"  class="nav-btn-left">FAQ</a>
+                <a href="#"  class="nav-btn-left">Contact Us</a>
+            </span>
+            <span class="nav-span">
+                <a href="{{ url_for('auths.login')}}" class="nav-btn">Management</a>
+                <a href="{{ url_for('auths.login')}}" class="nav-btn">Students</a>
+                <a href="{{ url_for('auths.login') }}" class="nav-btn">Teachers</a>
+                <a href="#" class="nav-btn">Staffs</a>
+            </span>
+        </div>
+    </nav>
+
+    <!-- <div class="background-div">
+
+    </div> -->
+
+
+    <!-- <div style="height: 50px;">
+
+    </div> -->
+
+    <div class="scrolls">
+        <div class="scroll-container" id="scrollContainer">
+            <button class="nav-button left" onclick="scrollPrev()">&#10094;</button>
+            <button class="nav-button right" onclick="scrollNext()">&#10095;</button>
+            <img src="{{ url_for('static', filename='images/can_img_1.png' ) }}" alt="Image 1">
+            <img src="{{ url_for('static', filename='images/can_img_2.png' ) }}" alt="Image 2">
+            <img src="{{ url_for('static', filename='images/can_img_3.png' ) }}" alt="Image 3">
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-div">
+            <a href="#" class="footer-anchor">Terms and Condition of Use</a>
+            <a href="#" class="footer-anchor">Lecture Time tables</a>
+            <a href="#" class="footer-anchor">FAQ</a>
+            <a href="#" class="footer-anchor">Privacy Statement</a>
+        </div>
+        <div class="footer-div">
+            <a href="#" class="footer-anchor">Examination Time Table</a>
+            <a href="#" class="footer-anchor">Contact Us</a>
+            <a href="#" class="footer-anchor">Student Help</a>
+            <a href="#" class="footer-anchor">Staff Help</a>
+        </div>
+        <p style="color: #000080; margin-top: 2rem;">©2022-2024 Iscore Model College</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='JS/scroll.js')}}"></script>
+</body>
+</html>

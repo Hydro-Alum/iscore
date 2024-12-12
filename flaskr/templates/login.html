@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashed.css' ) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="alert-btn" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" id="close-btn" >&times;</button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="wrapper">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <h1>Login</h1>
+            <div class="input-box">
+                {{ form.email }}
+                <i class="fa fa-user"></i>
+                    {% if form.email.errors %}
+                        <div>
+                            {% for error in form.email.errors %}
+                                <span>
+                                    {{ error }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+            </div>
+            <div class="input-box">
+                {{ form.password }}
+                <i class="fa fa-lock"></i>
+                {% if form.password.errors %}
+                        <div>
+                            {% for error in form.password.errors %}
+                                <span>
+                                    {{ error }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+            </div>
+            
+            <div class="remember-forgot">
+                <label for="">{{ form.remember }}Remember me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+
+            {{ form.submit(class="btn") }}
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='JS/alert.js')}}"></script>
+</body>
+</html>

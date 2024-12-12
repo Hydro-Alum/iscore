@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/iscore-favicon.png' ) }}">
+    <title>{% block title %}Teacher's Profile{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='teacher-profile-layout.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teacher-profile.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teacher-score-upload.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='score-upload.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='teacher-registeration.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashed.css' ) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+</head>
+<body>
+    <div class="tch-modal hidden" id="tch-modal">
+        <div class="tch-modal-popup" id="tch-modal-popup">
+            <h3>Would you like to Delete {{ teacher.title | title }} {{ teacher.last_name | title}} {{ teacher.first_name | title}} permanently?</h3>
+            <h4>To continue type <b style="color: red;">DELETE</b> in all uppercase</h4>
+            <input type="text" name="tch-modal-delete-input" id="tch-modal-delete-input">
+            <button type="submit" class="tch-modal-submit-btn" id="tch-modal-submit-btn" name="tch-modal-submit-btn">Delete</button>
+            <button type="button" class="tch-modal-btn-close" id="tch-modal-close-btn" >&times;</button>
+
+        </div>
+    </div>
+    
+    <nav class="sch-profile__nav">
+        <div class="sch-top__header">
+            <div class="sch-logo">
+                <img src="{{ url_for('static', filename='images/iscore_logo.png')}}" alt="school logo">
+            </div>
+            <div class="sch-title">
+                <p>Iscore Model College</p>
+                <p>Teacher Information Portal</p>
+            </div>
+        </div>
+        <div class="nav-header">
+            <div class="left-header">
+                <ul>
+                    <li><a href="{{ url_for('main.home_page') }}">Home</a></li>
+                    <li><a href="">FAQs</a></li>
+                    <li><a href="">Attendance</a></li>
+                    <li><a href="">Contact Us</a></li>
+                    {% if current_user.role == "admin" %}
+                        <li><a href="{{ url_for('managements.dashboard') }}">Dashboard</a></li>                    
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="right-header">
+                <p>
+                    <span>Welcome:</span>
+                    {{ teacher.title | title }} {{ teacher.last_name | title }}
+                    <a href="{{ url_for('auths.logout') }}">Sign Out</a>
+                </p>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="teacher-profile__content">
+        <nav class="teacher-profile__sidebar">
+            <div class="sidebar__content">
+                <div class="sidebar__main">
+                    <div class="sidebar__title">
+                        Profile Menu
+                    </div>
+                    <div class="sidebar__items">
+                        <ul>
+                            <li><a href="{{ url_for('teachers.teacher_profile', teacher_id=teacher.id) }}">Profile Page</a></li>
+                            <li><a href="{{ url_for('main.home_page') }}">Home</a></li>
+                            <li><a href="{{ url_for('students.score_upload_option')}}">Upload Students Score</a></li>
+                            <li><a href="{{ url_for('students.subject_scores_option')}}">View Subject Results</a></li>
+                            <li><a href="">Assignments</a></li>
+                            <li><a href="">Notice Board</a></li>
+                            <li><a href="">Inform Student</a></li>
+                            {% if current_user.role == "admin" %}
+                                <li><a href="{{ url_for('teachers.update_teacher_profile', teacher_id=teacher.id) }}" style="color: rgb(201, 201, 85);">Update Teacher Profile</a></li>                    
+                            {% endif %}
+                            {% if current_user.role == "admin" %}
+                                <li><button type="submit" id="tch-delete-btn">De-register Teacher</button></li>                    
+                            {% endif %}
+                            <!-- {% if current_user.role == "admin" %}
+                                <li><a href="" style="color: red;">De-register Teacher</a></li>                    
+                            {% endif %} -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="sidebar-sign-out">
+                    <a href="{{ url_for('auths.logout') }}">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Sign Out</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="teacher-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" id="alert-btn" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" id="close-btn" >&times;</button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-div__left">
+                <a href="#">Terms and Condition of Use</a>
+                <a href="#">Lecture Time tables</a>
+                <a href="#">FAQ</a>
+                <a href="#">Privacy Statement</a>
+            </div>
+            <div class="footer-div__right">
+                <a href="#">Examination Time Table</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Student Help</a>
+                <a href="#">Staff Help</a>
+            </div>
+        </div>
+        <p>© 2022-2025 Icore Model College</p>
+    </footer>
+    <script src="{{ url_for('static', filename='JS/alert.js')}}"></script>
+    <script src="{{ url_for('static', filename='JS/tch-modal.js')}}"></script>
+</body>
+</html>

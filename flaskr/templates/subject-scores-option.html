@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}Subject Score View{% endblock %}
+
+{% block content %}
+    <div class="student-reg__wrapper">
+        <div class="student-reg__header">
+            <h1>VIEW SUBJECT RAW SCORE</h1>
+            <P>Select None in department for Junior Students(JSS)</P>
+        </div>
+        <div>
+            <form action="", method="post">
+                {{ form.hidden_tag() }}
+                <div>
+                    <div class="student-reg-labels">
+                        {{ form.session.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.session(class="student-reg-input") }}
+                    {% if form.session.errors %}
+                        {% for error in form.session.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="student-reg-labels">
+                        {{ form.term.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.term(class="student-reg-input") }}
+                    {% if form.term.errors %}
+                        {% for error in form.term.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="student-reg-labels">
+                        {{ form.student_class.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.student_class(class="student-reg-input") }}
+                    {% if form.student_class.errors %}
+                        {% for error in form.student_class.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+    
+                <div>
+                    <div class="student-reg-labels">
+                        {{ form.department.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.department(class="student-reg-input") }}
+                    {% if form.department.errors %}
+                        {% for error in form.department.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    <div class="student-reg-labels">
+                        {{ form.subject.label }}<span style="color:red">*</span>
+                    </div>
+                    {{ form.subject(class="student-reg-input") }}
+                    {% if form.subject.errors %}
+                        {% for error in form.subject.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    {% endif%}
+                </div>
+                <div>
+                    {{ form.submit(class="reg-student__btn")}}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock%}

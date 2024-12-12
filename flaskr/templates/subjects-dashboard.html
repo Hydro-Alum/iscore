@@ -1,0 +1,11 @@
+{% extends "layout.html"%}
+
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+<div class="student-dashboard__wrapper">
+    <div class="sch-seesion"><a href="{{ url_for('managements.subject_create_view') }}">Add New Subject</a></div>
+    <div class="sch-seesion"><a href="{{ url_for('managements.get_subjects') }}">All Subjects</a></div>
+    <!-- <div class="update-seesion"><a href="">Update Subject</a></div> -->
+</div>
+{% endblock %}
