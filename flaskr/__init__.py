@@ -19,7 +19,7 @@ login_manager.login_view = "auths.login"
 from flaskr import models
 
 
-def create_app(config_class=ProductionConfig):
+def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     app.config["SESSION_SQLALCHEMY"] = db
