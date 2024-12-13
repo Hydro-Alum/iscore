@@ -34,17 +34,6 @@
                 </div>
                 <div>
                     <div class="teacher-reg-labels">
-                        {{ form.mode.label }}<span style="color:red">*</span>
-                    </div>
-                    {{ form.mode(class="teacher-reg-input") }}
-                    {% if form.mode.errors %}
-                        {% for error in form.mode.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    {% endif%}
-                </div>
-                <div>
-                    <div class="teacher-reg-labels">
                         {{ form.student_class.label }}<span style="color:red">*</span>
                     </div>
                     {{ form.student_class(class="teacher-reg-input") }}

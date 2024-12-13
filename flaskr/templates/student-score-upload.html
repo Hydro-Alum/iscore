@@ -6,7 +6,7 @@
 
 <div class="upload-wrapper table-wrapper">
     <div class="upload-header">
-        <h1><span>{{ mode|upper }}</span> {{ subject|upper }} SCORES FOR {{ student_class|upper }} {% if department and not department =="all" %}{{ department|upper }}{% endif %}</h1>
+        <h1><span style="color: green;">{{ subject|upper }}</span> {{ subject|upper }} SCORES FOR {{ student_class|upper }} {% if department and not department =="all" %}{{ department|upper }}{% endif %}</h1>
     </div>
     <form action="{{ url_for('students.score_upload') }}", method="post">
         <input type="hidden" name="student_class" value="{{ student_class }}">
