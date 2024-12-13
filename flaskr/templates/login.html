@@ -21,7 +21,7 @@
         {% endif %}
     {% endwith %}
     <div class="wrapper">
-        <form action="" method="post">
+        <form action="{{url_for('auths.login')}}" method="post">
             {{ form.hidden_tag() }}
             <h1>Login</h1>
             <div class="input-box">
